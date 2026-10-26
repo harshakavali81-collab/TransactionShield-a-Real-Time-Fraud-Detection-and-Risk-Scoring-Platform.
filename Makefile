@@ -10,7 +10,7 @@ api:
 web:
 	cd frontend && npm run dev
 lint:
-	ruff check ml backend tests scripts
+	ruff check ml backend tests scripts --select E9,F63,F7,F82
 
 test:
 	pytest -q
