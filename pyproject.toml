@@ -1,0 +1,6 @@
+[tool.ruff]
+line-length = 100
+exclude = ["notebooks", "data", "artifacts"]
+[tool.pytest.ini_options]
+testpaths = ["tests", "backend/tests"]
+pythonpath = ["."]

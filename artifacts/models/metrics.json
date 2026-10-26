@@ -1,0 +1,52 @@
+{
+  "dataset": "synthetic demonstration data",
+  "rows": 4000,
+  "fraud_rate": 0.02325,
+  "chronological_split": {
+    "train": 2400,
+    "validation": 800,
+    "test": 800
+  },
+  "selected_model": "lightgbm",
+  "threshold_source": "validation F2 maximum",
+  "model_comparison": [
+    {
+      "name": "logistic_regression",
+      "validation_pr_auc": 0.096791
+    },
+    {
+      "name": "random_forest",
+      "validation_pr_auc": 0.058783
+    },
+    {
+      "name": "xgboost",
+      "validation_pr_auc": 0.097378
+    },
+    {
+      "name": "lightgbm",
+      "validation_pr_auc": 0.113405
+    }
+  ],
+  "test": {
+    "precision": 0.02459016393442623,
+    "recall": 0.14285714285714285,
+    "f1": 0.04195804195804196,
+    "pr_auc": 0.0319484481658177,
+    "roc_auc": 0.5273855370132648,
+    "brier_score": 0.02629308335841066,
+    "confusion_matrix": [
+      [
+        660,
+        119
+      ],
+      [
+        18,
+        3
+      ]
+    ],
+    "support": 800,
+    "positive_cases": 21,
+    "threshold": 0.03
+  },
+  "test_only_evaluated_once": true
+}

@@ -1,0 +1,27 @@
+{
+  "records": 4000,
+  "fraud_rate": 0.02325,
+  "median_amount": 83.22,
+  "by_category": {
+    "digital": {
+      "mean": 0.0188,
+      "count": 904
+    },
+    "gaming": {
+      "mean": 0.0381,
+      "count": 394
+    },
+    "groceries": {
+      "mean": 0.0219,
+      "count": 1094
+    },
+    "retail": {
+      "mean": 0.0252,
+      "count": 1153
+    },
+    "travel": {
+      "mean": 0.0176,
+      "count": 455
+    }
+  }
+}
