@@ -120,3 +120,13 @@ TransactionShield/
 ```
 
 See [architecture](ARCHITECTURE.md), [workflow](PROJECT_WORKFLOW.md), and [deployment](DEPLOYMENT.md).
+
+
+## Upgrade additions (October 2026)
+- `migrations/versions/`: versioned legacy-compatible base schema and monitoring upgrade
+- `backend/app/api/routes/monitoring.py`: demo drift monitoring, reviewer feedback API
+- `frontend/src/pages/Monitoring.jsx`: drift and monitoring interface
+- `streaming/producer.py`, `streaming/consumer.py`: optional Kafka-compatible local synthetic stream
+- `scripts/check_release.py`: release readiness smoke check
+- `scripts/upgrade_legacy_database.py`: backup-gated unversioned schema upgrade
+- `docs/SECURITY.md`, `docs/OPERATIONS.md`, `docs/PRODUCTION_GAP_ANALYSIS.md`: operational documentation

@@ -18,6 +18,12 @@ cd frontend && npm install && npm run dev
 ```
 Dashboard <http://localhost:5173>. By default SQLite persists local demonstration prediction history.
 
+## Database migrations
+New deployments use `alembic upgrade head` against an empty database. The Docker backend runs it before serving requests. **If you already used an older database with an unversioned `transactions` table**, take and verify a backup, then run `python scripts/upgrade_legacy_database.py --backup-confirmed`. This tool validates the nine original table columns before stamping revision 0001 and upgrading to 0002. For other schemas, do not force a migration. The development app still creates tables automatically to simplify a clean local demo. Schema upgrades on existing live installations require separate migration planning.
+
+## Optional streaming
+See [operations runbook](OPERATIONS.md). `docker compose --profile streaming up -d broker` starts a local Kafka-compatible broker. Streaming depends on Docker and optional confluent-kafka; this architecture has not been tested against a hosted Kafka cluster.
+
 ## Production deployment checklist (NOT COMPLETED)
 - Harden Docker images and dependencies; scan for CVEs and pin hashes.
 - Protect with TLS, identity provider, RBAC/tenant boundaries, API gateway and rate limiting.

@@ -17,6 +17,9 @@ TransactionShield scores synthetic credit card, wallet, transfer, and e-commerce
 - Pydantic constraints, duplicate transaction ID protection, SQLite development fallback, PostgreSQL Docker service.
 - React / Recharts: Overview, Scoring, Transactions with CSV export, Analytics, Model Performance.
 - Tests, architecture docs, workflows, reproducible charts, Docker Compose, local simulator.
+- Alembic migration, readiness checks, request-security guardrails, drift monitoring API and React monitoring tab.
+- Optional Kafka-compatible synthetic producer/consumer with at-least-once offset commits.
+- Clear demo-review feedback provenance and operational deployment/security runbooks.
 
 ## Quickstart (Python 3.11 recommended, Node.js 20+)
 ```bash
@@ -58,6 +61,9 @@ POST to `/predict` and inspect `fraud_probability`, `risk_score` (0–100), `ris
 - [Model card, limitations & dataset provenance](docs/MODEL_CARD.md)
 - [Deployment instructions](docs/DEPLOYMENT.md)
 - [Test plan](docs/TEST_PLAN.md)
+- [Security policy & threat model](docs/SECURITY.md)
+- [Operational runbook and optional Kafka](docs/OPERATIONS.md)
+- [Production readiness gaps](docs/PRODUCTION_GAP_ANALYSIS.md)
 - [Dataset documentation](data/README.md)
 - [Model comparison chart](artifacts/reports/model_comparison.png) · [Precision-recall chart](artifacts/reports/precision_recall.png) · [Confusion matrix](artifacts/reports/confusion_matrix.png) · [SHAP illustration](artifacts/reports/shap_summary.png)
 - [GitHub Actions](.github/workflows/ci.yml)
@@ -70,4 +76,5 @@ POST to `/predict` and inspect `fraud_probability`, `risk_score` (0–100), `ris
 
 ## Project roadmap
 - **Implemented:** Synthetic data, ML model comparisons, risk scoring, SQL persistence, REST API, responsive React dashboard, CI, Docker, documentation.
-- **Research / production work remaining:** Real consented transaction data, calibrated probabilities and fraud-ground-truth labels, hardened auth, cryptographic observability, network security, database migrations, live Kafka ingestion, drift alert scheduling and hosted deployment.
+- **Implemented expansion:** Initial Alembic schema, health/readiness, synthetic drift monitoring and bounded review feedback, security defaults, monitoring UI, optional Kafka-compatible demo integration.
+- **Production blockers:** Consented labeled data and validation, calibration, tenant-aware identity, encryption and gateway policies, real backup/restore, hosted cloud infrastructure, managed event ingestion, independent audits, monitoring alerts and operational approvals. These cannot be claimed complete.

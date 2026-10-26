@@ -12,6 +12,9 @@ async function request(path, options = {}) {
 }
 export const api = {
   health: () => request('/health'),
+  ready: () => request('/ready'),
+  monitoring: () => request('/monitoring/overview'),
+  demoFeedbackMetrics: () => request('/monitoring/demo-feedback-metrics'),
   statistics: () => request('/statistics'),
   analytics: () => request('/analytics'),
   metrics: () => request('/metrics'),

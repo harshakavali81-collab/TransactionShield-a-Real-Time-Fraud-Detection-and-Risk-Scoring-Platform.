@@ -10,3 +10,14 @@
 - CI includes Python lint, pytest, local synthetic training, report chart generation, frontend build.
 
 Not yet covered: performance/load testing, protected payment data handling, real-world drift, live label adjudication, migrations under traffic, cloud disaster recovery and security pen testing. Never claim production readiness from these checks.
+
+
+## Extended test coverage
+- `/health` and `/ready`: liveness, database/model readiness
+- Monitoring: bounded feature snapshots and explicit absence of verified fraud outcome labels
+- Feedback: duplicate protection, schema validation, unverified-label provenance
+- Security: oversized requests, response headers, fail-closed production configuration
+- Streaming: stable synthetic IDs, JSON roundtrip, ack and replay behavior through fakes
+- Migrations: `alembic upgrade head` plus API release smoke tests in GitHub Actions
+- Frontend: production asset compilation with `npm run build` in GitHub Actions
+These tests do not replace host-level Kafka, cloud deployment, pentest or real-data backtesting.

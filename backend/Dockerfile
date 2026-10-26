@@ -6,9 +6,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY ml ./ml
 COPY backend ./backend
 COPY scripts ./scripts
+COPY migrations ./migrations
+COPY alembic.ini ./alembic.ini
 COPY artifacts/models ./artifacts/models
 RUN python -m ml.training.train --fast
 RUN useradd --create-home --uid 10001 appuser && mkdir -p /app/artifacts/models && chown -R appuser /app
 USER appuser
 EXPOSE 8000
-CMD ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "alembic upgrade head && exec uvicorn backend.app.main:app --host 0.0.0.0 --port 8000"]

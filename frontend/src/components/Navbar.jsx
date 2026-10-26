@@ -1,6 +1,6 @@
 import React from 'react';
-import {ShieldCheck, LayoutDashboard, Search, ListFilter, Activity, Github, Radar} from 'lucide-react';
-const links=[['overview','Overview',LayoutDashboard],['score','Risk scoring',Search],['transactions','Transactions',ListFilter],['analytics','Analytics',Activity],['models','Model performance',Radar]];
+import {ShieldCheck, LayoutDashboard, Search, ListFilter, Activity, Github, Radar, Gauge} from 'lucide-react';
+const links=[['overview','Overview',LayoutDashboard],['score','Risk scoring',Search],['transactions','Transactions',ListFilter],['analytics','Analytics',Activity],['models','Model performance',Radar],['monitoring','Monitoring',Gauge]];
 export default function Navbar({page,setPage}) {return <aside className="sidebar">
   <div className="brand"><div className="brand-icon"><ShieldCheck size={27}/></div><div><strong>Transaction<span>Shield</span></strong><small>FRAUD INTELLIGENCE</small></div></div>
   <div className="sidebar-label">WORKSPACE</div><nav>{links.map(([id,name,Icon])=><button key={id} type="button" className={'nav-link '+(page===id?'active':'')} onClick={()=>setPage(id)}><Icon size={18}/><span>{name}</span></button>)}</nav>
