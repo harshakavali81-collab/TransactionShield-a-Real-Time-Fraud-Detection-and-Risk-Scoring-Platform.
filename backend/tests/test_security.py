@@ -30,3 +30,12 @@ def test_prod_rejects_missing_auth_and_sqlite(monkeypatch):
     monkeypatch.setattr(config, 'CORS_ORIGINS', ['https://risk.example.org'])
     with pytest.raises(RuntimeError, match='PostgreSQL'):
         config.validate_configuration()
+
+
+def test_oversized_chunked_payload_is_rejected():
+    # Streaming iterator causes httpx to omit Content-Length.
+    with TestClient(app) as client:
+        response = client.post('/predict', content=iter([b'{', b'x' * 20000]),
+                               headers={'Content-Type': 'application/json'})
+        assert response.status_code == 413
+        assert response.headers.get('x-request-id')

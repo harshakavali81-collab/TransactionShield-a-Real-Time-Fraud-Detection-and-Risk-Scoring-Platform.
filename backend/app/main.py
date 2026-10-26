@@ -51,7 +51,22 @@ async def guard(request: Request, call_next):
                 response = JSONResponse(status_code=413, content={"detail": "Request too large"})
                 response.headers["X-Request-ID"] = request_id
                 response.headers["Cache-Control"] = "no-store"
+                status = 413
                 return response
+            # Enforce a real byte cap even if Content-Length was omitted/forged.
+            # This demo deliberately accepts only small JSON bodies.
+            chunks = []
+            byte_count = 0
+            async for chunk in request.stream():
+                byte_count += len(chunk)
+                if byte_count > MAX_REQUEST_BYTES:
+                    response = JSONResponse(status_code=413, content={"detail": "Request too large"})
+                    response.headers["X-Request-ID"] = request_id
+                    response.headers["Cache-Control"] = "no-store"
+                    status = 413
+                    return response
+                chunks.append(chunk)
+            request._body = b"".join(chunks)
         public = {"/health", "/ready"}
         if API_KEY and request.url.path not in public:
             supplied = request.headers.get("x-api-key", "")

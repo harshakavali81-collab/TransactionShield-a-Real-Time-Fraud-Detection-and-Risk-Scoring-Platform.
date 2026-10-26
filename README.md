@@ -64,6 +64,10 @@ POST to `/predict` and inspect `fraud_probability`, `risk_score` (0–100), `ris
 - [Security policy & threat model](docs/SECURITY.md)
 - [Operational runbook and optional Kafka](docs/OPERATIONS.md)
 - [Production readiness gaps](docs/PRODUCTION_GAP_ANALYSIS.md)
+- [Authorized, PII-minimized feed validation](docs/INTEGRATION_CONTRACT.md)
+- [Frozen-model independent holdout evaluator](docs/INDEPENDENT_VALIDATION.md)
+- [Public offline preview on GitHub Pages](docs/PUBLIC_DEMO.md)
+- [Protected cloud staging Blueprint](docs/CLOUD_STAGING.md)
 - [Dataset documentation](data/README.md)
 - [Model comparison chart](artifacts/reports/model_comparison.png) · [Precision-recall chart](artifacts/reports/precision_recall.png) · [Confusion matrix](artifacts/reports/confusion_matrix.png) · [SHAP illustration](artifacts/reports/shap_summary.png)
 - [GitHub Actions](.github/workflows/ci.yml)
@@ -77,4 +81,5 @@ POST to `/predict` and inspect `fraud_probability`, `risk_score` (0–100), `ris
 ## Project roadmap
 - **Implemented:** Synthetic data, ML model comparisons, risk scoring, SQL persistence, REST API, responsive React dashboard, CI, Docker, documentation.
 - **Implemented expansion:** Initial Alembic schema, health/readiness, synthetic drift monitoring and bounded review feedback, security defaults, monitoring UI, optional Kafka-compatible demo integration.
+- **Implemented evaluation/deployment expansion:** strict authorized CSV contract, frozen-model external holdout report with bootstrap intervals, streaming request-byte ceiling, offline static React preview, Pages publishing workflow, and optional Render API+PostgreSQL staging blueprint. These require real owner configuration to publish/run.
 - **Production blockers:** Consented labeled data and validation, calibration, tenant-aware identity, encryption and gateway policies, real backup/restore, hosted cloud infrastructure, managed event ingestion, independent audits, monitoring alerts and operational approvals. These cannot be claimed complete.

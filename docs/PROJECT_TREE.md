@@ -130,3 +130,11 @@ See [architecture](ARCHITECTURE.md), [workflow](PROJECT_WORKFLOW.md), and [deplo
 - `scripts/check_release.py`: release readiness smoke check
 - `scripts/upgrade_legacy_database.py`: backup-gated unversioned schema upgrade
 - `docs/SECURITY.md`, `docs/OPERATIONS.md`, `docs/PRODUCTION_GAP_ANALYSIS.md`: operational documentation
+
+### Safety/deployment extensions
+- `ml/data/partner_contract.py` — authorized local CSV schema and privacy boundary.
+- `ml/training/independent_validation.py` — frozen model external holdout evaluation and uncertainty report.
+- `frontend/src/api/staticDemo.js` — fictional offline UI preview (not model inference).
+- `.github/workflows/pages-demo.yml` — Pages build/deploy, requires Pages enabled.
+- `deploy/render.yaml` — optional protected Render cloud staging, requires provider account.
+- `docs/{PUBLIC_DEMO,CLOUD_STAGING,INTEGRATION_CONTRACT,INDEPENDENT_VALIDATION}.md` — setup and limitations.

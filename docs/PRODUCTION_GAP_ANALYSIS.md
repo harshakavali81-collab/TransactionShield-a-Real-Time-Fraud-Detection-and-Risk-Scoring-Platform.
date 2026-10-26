@@ -11,3 +11,11 @@
 | Deployment | Multi-service Docker Compose and build workflows | Cloud provider selection, real domain/TLS, secrets, infrastructure provisioning, staging and rollback |
 
 **Safety gate:** The repository is a complete *demonstration application*, not a certified real-time banking fraud service. No actual fraud prevention effectiveness or production-level security should be claimed.
+
+## Latest reproducible safety improvements
+
+- External labeled holdout evaluator (operator-attested authorization, frozen threshold, bootstrap intervals and support-aware subgroup summaries), but **no real dataset currently supplied or independently evaluated**.
+- Strict approved CSV validation rejects direct identifiers, extra columns and duplicate opaque transaction tokens; **not connected to a bank feed**.
+- Actual request-stream byte accounting (including absent Content-Length) in FastAPI. This is only one protective measure, not penetration testing.
+- GitHub Pages workflow for a public **offline fictional simulation**; whether a public URL exists depends on GitHub Pages settings and the deployment run.
+- Render Blueprint for optional protected API staging with provider-managed HTTPS ingress and DB, and generated server-side API key; **not provisioned until Render is connected by an authorized owner**.

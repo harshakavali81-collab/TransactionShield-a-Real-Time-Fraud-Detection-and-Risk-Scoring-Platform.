@@ -1,3 +1,4 @@
+import {staticDemoApi} from './staticDemo';
 const BASE = import.meta.env.VITE_API_URL || '/api';
 async function request(path, options = {}) {
   const controller = new AbortController();
@@ -10,7 +11,7 @@ async function request(path, options = {}) {
     return data;
   } finally {clearTimeout(timer);}
 }
-export const api = {
+const remoteApi = {
   health: () => request('/health'),
   ready: () => request('/ready'),
   monitoring: () => request('/monitoring/overview'),
@@ -21,3 +22,6 @@ export const api = {
   history: (limit=100) => request(`/history?limit=${limit}`),
   predict: (payload) => request('/predict', {method:'POST', body:JSON.stringify(payload)})
 };
+
+export const STATIC_DEMO = import.meta.env.VITE_STATIC_DEMO === 'true';
+export const api = STATIC_DEMO ? staticDemoApi : remoteApi;

@@ -1,0 +1,32 @@
+# OPTIONAL protected cloud staging. Sync via Render's Blueprint dashboard.
+# A public endpoint is NOT a certified payment-fraud engine.
+services:
+  - type: web
+    name: transactionshield-api-staging
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    healthCheckPath: /ready
+    autoDeployTrigger: checksPass
+    # Managed HTTPS terminates at the Render ingress. Every non-health endpoint requires a secret.
+    dockerCommand: sh -c 'alembic upgrade head && exec uvicorn backend.app.main:app --host 0.0.0.0 --port ${PORT:-10000}'
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: API_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: transactionshield-demo-staging-db
+          property: connectionString
+      # Must be replaced with the domain of a trusted/identity-aware frontend.
+      # Public GitHub Pages offline preview MUST NOT access this protected API.
+      - key: CORS_ORIGINS
+        value: https://example.invalid
+      - key: MODEL_PATH
+        value: /app/artifacts/models/fraud_model.joblib
+      - key: METRICS_PATH
+        value: /app/artifacts/models/metrics.json
+databases:
+  - name: transactionshield-demo-staging-db
+    databaseName: transactionshield_demo
+    user: transactionshield_demo
