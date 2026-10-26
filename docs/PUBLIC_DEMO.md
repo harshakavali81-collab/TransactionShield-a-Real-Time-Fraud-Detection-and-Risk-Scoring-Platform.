@@ -11,7 +11,7 @@ This repository includes a no-bank-data frontend preview published via GitHub Pa
 ## Deploy
 
 1. Repository Settings → Pages → Source → **GitHub Actions**.
-2. Open **Actions → Publish offline synthetic UI preview** and run it (or push updated frontend files).
+2. New frontend pushes now build a downloadable preview artifact but deliberately **do not attempt deployment** until Pages has been enabled. Open **Actions → Publish offline synthetic UI preview → Run workflow** to publish after changing Pages settings.
 3. If successful, open the `github-pages` environment URL shown by Actions. GitHub Pages availability and GitHub permissions are controlled by GitHub, not this project.
 4. This deployment is **frontend only**; it cannot prove production backend hosting, fraud effectiveness or security certification.
 
