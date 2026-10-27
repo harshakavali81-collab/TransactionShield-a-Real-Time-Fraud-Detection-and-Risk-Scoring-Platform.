@@ -1,8 +1,25 @@
+![Branded TransactionShield project banner](docs/visuals/hero-banner.svg)
+
 # 🛡️ TransactionShield — Real-Time Fraud Detection & Risk Scoring Platform
 
 > **Portfolio/demo application** · Machine learning + FastAPI + React + SQLAlchemy/PostgreSQL + Docker + optional MLflow and SHAP. **Data, predictions, and evaluation are synthetic. This is not a production fraud detector.**
 
-![Architecture overview](docs/screenshots/transactionshield-architecture.png)
+## Visual tour
+
+> **Synthetic-only demonstration.** The dashboard graphic is a concept, not a capture of a live deployment. All plotted metrics come from the recorded synthetic experiment.
+
+![Illustrative TransactionShield dashboard](docs/visuals/dashboard-concept.svg)
+
+| Architecture | Model comparison (validation PR-AUC) |
+| :---: | :---: |
+| ![Architecture pipeline](docs/visuals/system-architecture.svg) | ![Validation performance comparison](docs/visuals/model-benchmark.svg) |
+
+| Measured held-out metrics | Release readiness |
+| :---: | :---: |
+| ![Test confusion matrix](docs/visuals/evaluation-summary.svg) | ![External production requirements](docs/visuals/readiness-roadmap.svg) |
+
+[View the complete visual gallery](docs/VISUAL_GALLERY.md) · [Original detailed architecture](docs/screenshots/transactionshield-architecture.png)
+
 
 ## What it does
 TransactionShield scores synthetic credit card, wallet, transfer, and e-commerce transaction attributes. A fitted classifier estimates a fraud score; configurable rule-based review hints complement (but do **not** explain) the model. The REST API persists scored transactions and a responsive React dashboard visualizes review flags, history, risk distribution, and measured synthetic test metrics. The dashboard refreshes every 30 seconds; this is polling rather than a stream processor.
@@ -53,6 +70,7 @@ POST to `/predict` and inspect `fraud_probability`, `risk_score` (0–100), `ris
 **NO customer data or credit card numbers** included. `data/raw/synthetic_transactions.csv` is generated locally and ignored by Git. Never present results as actual bank or card-network model performance. Deploy only after a thorough security, legal, calibration, human-review, fairness and ground-truth evaluation program.
 
 ## Documentation & bookmarks
+- [Visual gallery](docs/VISUAL_GALLERY.md)
 - [System architecture](docs/ARCHITECTURE.md)
 - [Repository tree](docs/PROJECT_TREE.md)
 - [Measured synthetic results & graphs](docs/RESULTS.md)

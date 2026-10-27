@@ -1,5 +1,9 @@
 # Architecture
 
+![Visual system architecture](visuals/system-architecture.svg)
+
+[Visual gallery](VISUAL_GALLERY.md)
+
 ![TransactionShield system architecture](screenshots/transactionshield-architecture.png)
 
 ```mermaid

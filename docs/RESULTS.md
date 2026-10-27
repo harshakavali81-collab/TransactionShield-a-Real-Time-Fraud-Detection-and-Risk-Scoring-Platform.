@@ -1,5 +1,11 @@
 # Recorded synthetic evaluation results
 
+![Synthetic held-out evaluation](visuals/evaluation-summary.svg)
+
+![Synthetic validation model comparison](visuals/model-benchmark.svg)
+
+[Visual gallery](VISUAL_GALLERY.md)
+
 These figures were produced by `python -m ml.training.train --fast` on **4,000 fully synthetic transactions**, and are not estimates of real payment fraud detection ability.
 
 | Measure | Value |
