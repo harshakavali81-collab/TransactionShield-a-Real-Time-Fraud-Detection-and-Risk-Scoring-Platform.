@@ -30,3 +30,9 @@ The selected threshold reflects recall-oriented validation F2, and generates man
 ![Model comparison](../artifacts/reports/model_comparison.png)
 
 ![SHAP summary, only when tree model selected](../artifacts/reports/shap_summary.png)
+
+## Additional time-ordered synthetic diagnostics
+
+![Rolling-origin validation](../artifacts/reports/rolling_backtest.svg)
+
+[Read the five-fold diagnostic report](ROLLING_VALIDATION.md). This uses a **different fixed baseline**, not the serving LightGBM model, and cannot establish any real-world fraud detection performance.

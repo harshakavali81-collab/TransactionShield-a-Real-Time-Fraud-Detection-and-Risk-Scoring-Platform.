@@ -52,11 +52,15 @@ jobs:
           python scripts/verify_model_artifact.py
           python scripts/create_report.py
           python scripts/decision_costs.py
+      - name: Reproduce rolling-origin synthetic diagnostics
+        run: python scripts/rolling_backtest.py
       - name: Upload synthetic charts
         uses: actions/upload-artifact@v4
         with:
           name: synthetic-evaluation-charts
-          path: artifacts/reports/*.png
+          path: |
+            artifacts/reports/*.png
+            artifacts/reports/rolling_backtest.json
   frontend:
     runs-on: ubuntu-latest
     defaults:

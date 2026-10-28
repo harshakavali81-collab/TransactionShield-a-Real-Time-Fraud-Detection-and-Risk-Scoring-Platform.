@@ -228,3 +228,11 @@ TransactionShield/
 ```
 
 The ML pipeline is under `ml/`, the protected API is under `backend/`, the React interface is under `frontend/`, and independent checks, architecture diagrams, deployment instructions, and reproducible synthetic evaluation evidence are under `tests/`, `docs/`, `.github/`, and `artifacts/`.
+
+### Additional evaluation files
+
+- ml/training/rolling_validation.py — time-ordered folds
+- scripts/rolling_backtest.py — reproducible report/plot generator
+- tests/test_rolling_validation.py — fold boundaries and validation tests
+- docs/ROLLING_VALIDATION.md — interpretation, limitations and instructions
+- artifacts/reports/rolling_backtest.svg — GitHub-readable five-fold graph

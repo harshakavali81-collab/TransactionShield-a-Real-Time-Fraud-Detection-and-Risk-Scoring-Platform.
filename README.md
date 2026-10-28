@@ -29,6 +29,7 @@ TransactionShield scores synthetic credit card, wallet, transfer, and e-commerce
 - Leakage-safe scikit-learn preprocessing; **chronological** train/validation/test evaluation.
 - Logistic Regression, Random Forest and optional XGBoost/LightGBM comparison by **validation PR-AUC**.
 - Independent validation F2 threshold selection; held-out precision, recall, F1, PR-AUC, ROC-AUC, Brier score and confusion matrix.
+- Five-fold expanding-window synthetic logistic diagnostic with validation-only threshold tuning and a chart.
 - Optional tree SHAP summary function and MLflow tracking. UI review hints are separate explicit rules.
 - FastAPI: `/predict`, `/history`, `/transactions/{id}`, `/statistics`, `/analytics`, `/metrics`, `/health`, and `/docs`.
 - Pydantic constraints, duplicate transaction ID protection, SQLite development fallback, PostgreSQL Docker service.
@@ -101,6 +102,7 @@ POST to `/predict` and inspect `fraud_probability`, `risk_score` (0–100), `ris
 - [System architecture](docs/ARCHITECTURE.md)
 - [Repository tree](docs/PROJECT_TREE.md)
 - [Measured synthetic results & graphs](docs/RESULTS.md)
+- [Five-fold rolling-origin diagnostics and graph](docs/ROLLING_VALIDATION.md)
 - [Development workflow](docs/PROJECT_WORKFLOW.md)
 - [API endpoints](docs/API_REFERENCE.md)
 - [Model card, limitations & dataset provenance](docs/MODEL_CARD.md)

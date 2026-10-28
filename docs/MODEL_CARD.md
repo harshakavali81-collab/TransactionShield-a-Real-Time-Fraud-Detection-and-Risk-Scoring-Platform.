@@ -11,3 +11,7 @@
 **Interpretability:** SHAP summary may be computed for compatible tree estimators if SHAP is installed. Dashboard "reasons" are transparent hand-authored review heuristics, NOT model-derived attribution or causal effects. UI intentionally labels them that way.
 
 **Safety / governance:** no real-world use without expert model review, calibration, fairness and disparate-impact checks where appropriate, confirmed-label evaluation, protection from PII collection, adversarial threat modeling, audit access control, model version tracking, documentation of data provenance and human oversight.
+
+## Separate rolling-origin baseline
+
+The [five-fold chronological diagnostic](ROLLING_VALIDATION.md) uses a fixed logistic regression model with thresholds tuned on each fold’s validation period only. It is not an independent production validation of the served LightGBM model.

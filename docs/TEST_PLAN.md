@@ -28,3 +28,7 @@ These tests do not replace host-level Kafka, cloud deployment, pentest or real-d
 - `python scripts/backup_demo_sqlite.py --source ./transactionshield.sqlite3 --output ./demo-snapshot.sqlite3` previews a consistent local demo-only backup. Add `--confirm-synthetic-only` to write a new verified snapshot; production environments and existing destinations are refused.
 - The CI workflow runs both the ephemeral API smoke test and a synthetic SQLite backup snapshot check, and uploads an end-to-end evidence JSON report.
 - Neither check establishes compliance with payment/financial regulations or substitutes for a managed PostgreSQL PITR backup and restore test.
+
+## Rolling-origin time-series checks
+
+Unit tests verify sorted window boundaries, minority label handling, and no crossover of train/validation/test rows. CI regenerates synthetic rolling diagnostics separately after unit tests.
