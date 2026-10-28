@@ -38,6 +38,13 @@ TransactionShield scores synthetic credit card, wallet, transfer, and e-commerce
 - Optional Kafka-compatible synthetic producer/consumer with at-least-once offset commits.
 - Clear demo-review feedback provenance and operational deployment/security runbooks.
 
+## Verified model artifacts and repeatable Docker builds
+
+- The committed synthetic model and metrics have a SHA-256 manifest (`artifacts/models/model_manifest.json`) checked before predictions and in `/ready`.
+- Docker **does not retrain at build time**. Explicit training updates the model, metrics, and manifest together. The API fails closed with HTTP 503 for corrupt model output.
+- Run `python scripts/verify_model_artifact.py` to check consistency. SHA-256 is **not** a digital signature, a guarantee against malicious pickle contents, or evidence of real fraud-detection performance.
+- [Model integrity and release guide](docs/MODEL_INTEGRITY.md)
+
 ## Quickstart (Python 3.11 recommended, Node.js 20+)
 ```bash
 python -m venv .venv
@@ -46,6 +53,7 @@ python -m venv .venv
 pip install -r requirements-dev.txt
 python scripts/generate_demo.py
 python -m ml.training.train
+python scripts/verify_model_artifact.py
 python scripts/create_report.py
 pytest -q
 uvicorn backend.app.main:app --reload

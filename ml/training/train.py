@@ -13,6 +13,7 @@ from ml.data.load_data import load_data
 from ml.data.feature_engineering import make_preprocessor
 from ml.training.evaluate import metrics,optimize_threshold
 from ml.training.save_model import save_model
+from ml.training.model_integrity import write_manifest
 
 def candidates(seed=42,fast=False):
     models={"logistic_regression":LogisticRegression(max_iter=600, class_weight="balanced", random_state=seed),
@@ -56,6 +57,7 @@ def train(data_path=DATA,fast=False,tracking=False):
     save_model({"pipeline":best,"threshold":threshold,"model_name":name,"reference_stats":reference,"features":FEATURES})
     METRICS.parent.mkdir(parents=True,exist_ok=True)
     METRICS.write_text(json.dumps(report,indent=2))
+    write_manifest(MODEL, METRICS, report)
     if tracking or os.environ.get("ENABLE_MLFLOW") == "1":
         try:
             import mlflow

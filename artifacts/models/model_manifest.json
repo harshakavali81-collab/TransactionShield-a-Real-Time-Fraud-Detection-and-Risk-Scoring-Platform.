@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "purpose": "synthetic demonstration model; not approved for financial decisions",
+  "model_file": "fraud_model.joblib",
+  "model_sha256": "ae8e38809937340582d8f0974076476b91e4710f53f521715b2f9e3577451e25",
+  "metrics_file": "metrics.json",
+  "metrics_sha256": "f932122e80012391de9e083365ee5c0d4068b293f1a5300c2843419d80523e57",
+  "selected_model": "lightgbm",
+  "threshold": 0.03,
+  "source_dataset": "synthetic demonstration data",
+  "training_rows": 4000
+}

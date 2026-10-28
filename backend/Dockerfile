@@ -9,7 +9,7 @@ COPY scripts ./scripts
 COPY migrations ./migrations
 COPY alembic.ini ./alembic.ini
 COPY artifacts/models ./artifacts/models
-RUN python -m ml.training.train --fast
+RUN python scripts/verify_model_artifact.py
 RUN useradd --create-home --uid 10001 appuser && mkdir -p /app/artifacts/models && chown -R appuser /app
 USER appuser
 EXPOSE 8000

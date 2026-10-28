@@ -2,7 +2,8 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
-from backend.app.core.config import MODEL_PATH
+from backend.app.core.config import MODEL_PATH, METRICS_PATH
+from ml.training.model_integrity import verify_model_artifacts, ModelIntegrityError
 from backend.app.db.session import engine
 
 router = APIRouter()
@@ -22,7 +23,11 @@ def ready():
         db_ok = True
     except Exception:
         pass
-    model_ok = MODEL_PATH.is_file()
+    try:
+        verify_model_artifacts(MODEL_PATH, metrics_path=METRICS_PATH)
+        model_ok = True
+    except (ModelIntegrityError, OSError):
+        model_ok = False
     status = 200 if db_ok and model_ok else 503
     return JSONResponse(status_code=status, content={
         "status": "ready" if status == 200 else "unavailable",

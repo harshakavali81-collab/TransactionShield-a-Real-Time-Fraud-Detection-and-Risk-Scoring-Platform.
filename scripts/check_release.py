@@ -5,11 +5,12 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from fastapi.testclient import TestClient
 from backend.app.main import app
-from backend.app.core.config import ROOT, MODEL_PATH
+from backend.app.core.config import ROOT, MODEL_PATH, METRICS_PATH
+from ml.training.model_integrity import verify_model_artifacts
 
 
 def main():
-    assert MODEL_PATH.exists(), 'Train a model before release'
+    verify_model_artifacts(MODEL_PATH, metrics_path=METRICS_PATH)
     assert (ROOT / 'migrations/versions/0001_initial_schema.py').exists()
     assert (ROOT / 'frontend/package.json').exists()
     with TestClient(app) as client:
