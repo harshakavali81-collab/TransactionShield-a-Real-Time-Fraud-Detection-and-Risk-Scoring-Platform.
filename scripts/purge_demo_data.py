@@ -5,7 +5,11 @@ Dry-run is the default and exports only counts (not transaction identifiers).
 """
 import argparse
 import json
+import sys
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
