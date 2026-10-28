@@ -20,7 +20,8 @@ const remoteApi = {
   analytics: () => request('/analytics'),
   metrics: () => request('/metrics'),
   history: (limit=100) => request(`/history?limit=${limit}`),
-  predict: (payload) => request('/predict', {method:'POST', body:JSON.stringify(payload)})
+  predict: (payload) => request('/predict', {method:'POST', body:JSON.stringify(payload)}),
+  whatIf: (payload) => request('/simulate/what-if', {method:'POST', body:JSON.stringify(payload)})
 };
 
 export const STATIC_DEMO = import.meta.env.VITE_STATIC_DEMO === 'true';

@@ -6,6 +6,7 @@ Local interactive OpenAPI at <http://localhost:8000/docs>.
 |---|---|---|
 | GET | `/health` | Health and presence of trained model |
 | POST | `/predict` | Score and persist a transaction, returns HTTP 201 |
+| POST | `/simulate/what-if` | Compare two anonymous synthetic transaction scores without persistence |
 | GET | `/history?limit=50` | Latest stored scored transactions, max 500 |
 | GET | `/transactions/{transaction_id}` | Retrieve one persisted transaction |
 | GET | `/statistics` | Total/flagged/rate/mean score |
@@ -44,3 +45,7 @@ curl -X POST http://localhost:8000/predict/batch -H 'Content-Type: application/j
 ## Integrity-checked model metrics
 
 `GET /metrics` returns the recorded **synthetic** model evaluation only after verifying the committed model and metrics SHA-256 manifest. If the model, manifest, or evaluation data are missing or inconsistent, the endpoint returns `503 {"detail":"Evaluation artifacts unavailable"}`. The manifest is a consistency control; it does not establish real-world fraud-detection performance or trust in an unreviewed model file.
+
+## What-if lab
+
+Use `POST /simulate/what-if` to compare hypothetical values using the trained model without saving either example. It accepts `baseline` and `scenario`, each using the `/predict` feature schema without transaction IDs. The response includes scores, changed field names, `delta_probability`, `delta_risk_score`, and `flag_changed`. **Not a causal explanation or production fraud decision.** See [Scenario comparison](SCENARIO_COMPARISON.md). The public static UI uses rules instead of ML.

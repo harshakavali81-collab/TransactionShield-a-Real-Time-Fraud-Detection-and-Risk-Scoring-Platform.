@@ -29,7 +29,7 @@ TransactionShield scores synthetic credit card, wallet, transfer, and e-commerce
 - Leakage-safe scikit-learn preprocessing; **chronological** train/validation/test evaluation.
 - Logistic Regression, Random Forest and optional XGBoost/LightGBM comparison by **validation PR-AUC**.
 - Independent validation F2 threshold selection; held-out precision, recall, F1, PR-AUC, ROC-AUC, Brier score and confusion matrix.
-- Five-fold expanding-window synthetic logistic diagnostic with validation-only threshold tuning and a chart.
+- Five-fold expanding-window diagnostic with a fixed logistic baseline, per-fold validation thresholds and chart (all fictional data).
 - Optional tree SHAP summary function and MLflow tracking. UI review hints are separate explicit rules.
 - FastAPI: `/predict`, `/history`, `/transactions/{id}`, `/statistics`, `/analytics`, `/metrics`, `/health`, and `/docs`.
 - Pydantic constraints, duplicate transaction ID protection, SQLite development fallback, PostgreSQL Docker service.
@@ -97,12 +97,17 @@ POST to `/predict` and inspect `fraud_probability`, `risk_score` (0–100), `ris
 ## Data safety and provenance
 **NO customer data or credit card numbers** included. `data/raw/synthetic_transactions.csv` is generated locally and ignored by Git. Never present results as actual bank or card-network model performance. Deploy only after a thorough security, legal, calibration, human-review, fairness and ground-truth evaluation program.
 
+## What-if scenario lab (new)
+
+The React **What-if lab** and `POST /simulate/what-if` compare two fully synthetic transactions without writing either to the database. The feature changes and score differences demonstrate model sensitivity, **not causal effects** or actual fraud prevention. The offline GitHub Pages version uses distinct fictional browser rules rather than the trained model. See [Scenario comparison guide](docs/SCENARIO_COMPARISON.md).
+
 ## Documentation & bookmarks
 - [Visual gallery](docs/VISUAL_GALLERY.md)
 - [System architecture](docs/ARCHITECTURE.md)
+- [Stateless synthetic what-if comparison](docs/SCENARIO_COMPARISON.md)
 - [Repository tree](docs/PROJECT_TREE.md)
 - [Measured synthetic results & graphs](docs/RESULTS.md)
-- [Five-fold rolling-origin diagnostics and graph](docs/ROLLING_VALIDATION.md)
+- [Rolling-origin model evaluation report & graph](docs/ROLLING_VALIDATION.md)
 - [Development workflow](docs/PROJECT_WORKFLOW.md)
 - [API endpoints](docs/API_REFERENCE.md)
 - [Model card, limitations & dataset provenance](docs/MODEL_CARD.md)

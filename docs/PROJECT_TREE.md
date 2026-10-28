@@ -22,6 +22,8 @@ TransactionShield/
 │       ├── model_comparison.png
 │       ├── precision_recall.png
 │       ├── review_cost_sensitivity.svg
+│       ├── rolling_backtest.json
+│       ├── rolling_backtest.png
 │       ├── shap_summary.png
 │       └── synthetic_amounts.png
 ├── backend
@@ -111,6 +113,7 @@ TransactionShield/
 │   ├── PUBLIC_DEMO.md
 │   ├── RELEASE_PROCESS.md
 │   ├── RESULTS.md
+│   ├── ROLLING_VALIDATION.md
 │   ├── SECURITY.md
 │   ├── TEST_PLAN.md
 │   └── VISUAL_GALLERY.md
@@ -169,6 +172,7 @@ TransactionShield/
 │   │   ├── evaluate.py
 │   │   ├── independent_validation.py
 │   │   ├── model_integrity.py
+│   │   ├── rolling_validation.py
 │   │   ├── save_model.py
 │   │   ├── train.py
 │   │   └── tune.py
@@ -190,6 +194,7 @@ TransactionShield/
 │   ├── generate_demo.py
 │   ├── generate_project_tree.py
 │   ├── purge_demo_data.py
+│   ├── rolling_backtest.py
 │   ├── simulate_stream.py
 │   ├── smoke_e2e.py
 │   ├── upgrade_legacy_database.py
@@ -212,6 +217,7 @@ TransactionShield/
 │   ├── test_partner_and_holdout.py
 │   ├── test_pipeline_integration.py
 │   ├── test_preprocessing.py
+│   ├── test_rolling_validation.py
 │   ├── test_streaming.py
 │   └── test_training.py
 ├── .dockerignore
@@ -229,10 +235,9 @@ TransactionShield/
 
 The ML pipeline is under `ml/`, the protected API is under `backend/`, the React interface is under `frontend/`, and independent checks, architecture diagrams, deployment instructions, and reproducible synthetic evaluation evidence are under `tests/`, `docs/`, `.github/`, and `artifacts/`.
 
-### Additional evaluation files
+### Additional scenario comparison feature
 
-- ml/training/rolling_validation.py — time-ordered folds
-- scripts/rolling_backtest.py — reproducible report/plot generator
-- tests/test_rolling_validation.py — fold boundaries and validation tests
-- docs/ROLLING_VALIDATION.md — interpretation, limitations and instructions
-- artifacts/reports/rolling_backtest.svg — GitHub-readable five-fold graph
+- `backend/app/api/routes/simulate.py` — stateless synthetic what-if scoring endpoint.
+- `backend/tests/test_simulate.py` — validation and no-persistence API tests.
+- `frontend/src/pages/ScenarioComparison.jsx` — React what-if lab, including offline simulation.
+- `docs/SCENARIO_COMPARISON.md` — API contract, example, and limitations.

@@ -73,6 +73,19 @@ export const staticDemoApi = {
     note: 'All entries are fictional and generated in your browser; no real fraud outcomes.'}),
   metrics: async () => syntheticModelMetrics,
   history: async (limit = 100) => [...records].slice(0, limit),
+  whatIf: async ({baseline, scenario}) => {
+    const original = simulatedReview(baseline);
+    const hypothetical = simulatedReview(scenario);
+    const delta = Number((hypothetical.fraud_probability - original.fraud_probability).toFixed(6));
+    return {
+      demo_only: true, persisted: false, baseline: original, scenario: hypothetical,
+      changed_features: Object.keys(baseline).filter(key => baseline[key] !== scenario[key]).sort(),
+      delta_probability: delta, delta_risk_score: hypothetical.risk_score - original.risk_score,
+      flag_changed: original.is_flagged !== hypothetical.is_flagged,
+      direction: delta > 0 ? 'increase' : delta < 0 ? 'decrease' : 'unchanged',
+      disclaimer: 'Fictional browser-only rule scores; differences are not causal explanations, actual fraud probabilities, or payment decisions.'
+    };
+  },
   predict: async features => {
     const rec = {transaction_id: `STATIC-DEMO-${String(nextNumber++).padStart(4, '0')}`,
       created_at: new Date().toISOString(), amount: Number(features.amount), ...simulatedReview(features)};
