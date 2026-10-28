@@ -40,3 +40,7 @@ Set `DEMO_RATE_LIMIT` to a positive number of requests/minute to enable a **per-
 ```bash
 curl -X POST http://localhost:8000/predict/batch -H 'Content-Type: application/json' -d '{"transactions":[{"amount":1500,"hour":2,"account_age_days":10,"velocity_24h":11,"prior_chargebacks":1,"ip_risk_score":0.85,"is_international":1,"is_new_device":1,"merchant_category":"gaming","transaction_type":"card"}]}'
 ```
+
+## Integrity-checked model metrics
+
+`GET /metrics` returns the recorded **synthetic** model evaluation only after verifying the committed model and metrics SHA-256 manifest. If the model, manifest, or evaluation data are missing or inconsistent, the endpoint returns `503 {"detail":"Evaluation artifacts unavailable"}`. The manifest is a consistency control; it does not establish real-world fraud-detection performance or trust in an unreviewed model file.

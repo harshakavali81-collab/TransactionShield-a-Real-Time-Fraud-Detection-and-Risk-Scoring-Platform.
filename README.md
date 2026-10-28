@@ -46,6 +46,12 @@ TransactionShield scores synthetic credit card, wallet, transfer, and e-commerce
 - Run `python scripts/verify_model_artifact.py` to check consistency. SHA-256 is **not** a digital signature, a guarantee against malicious pickle contents, or evidence of real fraud-detection performance.
 - [Model integrity and release guide](docs/MODEL_INTEGRITY.md)
 
+## Fictional data retention and evaluation integrity
+
+- The `/metrics` endpoint verifies the model/metrics SHA-256 manifest before returning recorded synthetic results; corrupted or missing files yield HTTP 503 instead of unverified statistics.
+- The CLI `python scripts/purge_demo_data.py --days 30` previews fictional scoring records older than 30 days, while `--apply --confirm-synthetic-only` is required for bounded, transactional removal together with matching demo feedback; it refuses production configuration.
+- No real banking records, payment identifiers, customer details, or actual data-retention certification are included. See [synthetic data retention](docs/DEMO_DATA_RETENTION.md).
+
 ## Demo API request limits
 
 For local testing, set `DEMO_RATE_LIMIT=60` to allow bursts of up to 60 requests per minute per transport peer per application process. The in-memory token bucket refills gradually and returns HTTP 429 with `Retry-After` when exhausted; the default `0` disables it. Liveness/readiness and CORS preflight are not charged. This limiter cannot coordinate across workers and must **not** replace a production reverse-proxy/WAF/distributed quota system. See [security boundaries](docs/SECURITY.md).
@@ -99,6 +105,7 @@ POST to `/predict` and inspect `fraud_probability`, `risk_score` (0–100), `ris
 - [Deployment instructions](docs/DEPLOYMENT.md)
 - [Test plan](docs/TEST_PLAN.md)
 - [Security policy & threat model](docs/SECURITY.md)
+- [Safe cleanup for synthetic demo records](docs/DEMO_DATA_RETENTION.md)
 - [Operational runbook and optional Kafka](docs/OPERATIONS.md)
 - [Production readiness gaps](docs/PRODUCTION_GAP_ANALYSIS.md)
 - [Authorized, PII-minimized feed validation](docs/INTEGRATION_CONTRACT.md)

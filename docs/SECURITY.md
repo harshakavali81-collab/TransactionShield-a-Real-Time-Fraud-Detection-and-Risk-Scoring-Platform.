@@ -12,6 +12,9 @@
 - A synthetic feature snapshot supports drift visualization; do not store equivalent raw fields for actual users without legal, retention and minimization design.
 - Feedback entries are explicitly unverified human review examples; the API never calls them verified fraud ground truth.
 
+- Synthetic development-data cleanup is opt-in via a dry-run-first bounded CLI; it **cannot** be used against `ENVIRONMENT=production`. This is not a general privacy compliance or production retention system.
+- The `/metrics` API verifies the manifest before publishing stored demonstration evaluation numbers. This verifies consistency, not scientific validity or cryptographic authenticity.
+
 ## Security boundaries *not* implemented
 A production system needs an identity provider, per-tenant permission checks, a rate-limiting gateway, TLS at every hop, private networks, encrypted backups, secrets management, audit integrity and rotation, threat detection, model registry controls, data retention policies and independent penetration testing. The API key should be injected server-side by a trusted proxy, **not embedded in React client assets**. No financial decisions may be automated using this demonstration.
 

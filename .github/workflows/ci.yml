@@ -28,6 +28,7 @@ jobs:
         run: |
           alembic upgrade head
           python scripts/check_release.py
+          python scripts/purge_demo_data.py --days 30
       - name: Validate Docker Compose configuration
         run: docker compose --profile streaming config --quiet
       - name: Train on fresh synthetic data

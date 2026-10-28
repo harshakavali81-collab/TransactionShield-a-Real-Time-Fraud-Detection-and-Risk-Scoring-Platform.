@@ -26,3 +26,7 @@ For the containerized demo, `pg_dump` can capture the development PostgreSQL DB.
 2. Install `pip install -r requirements-streaming.txt`.
 3. Keep backend running, then run `python -m streaming.consumer` in one terminal and `python -m streaming.producer --count 20` in another.
 4. Producer emits generated transactions only. Consumer commits offsets after 201 or duplicate 409; other responses stop consumption for operator attention. No dead-letter stream, TLS/SASL, consumer parallelism or exactly-once guarantee is provided. Test infrastructure before claiming live operation.
+
+## Retention of fictional development records
+
+`python scripts/purge_demo_data.py --days 30` is **preview-only**. Apply deletion only with both `--apply --confirm-synthetic-only` after confirming the target is a disposable database containing synthetic records. The tool removes linked demo reviews atomically, caps the number of candidate rows, and refuses production configuration. See [synthetic retention rules](DEMO_DATA_RETENTION.md).
