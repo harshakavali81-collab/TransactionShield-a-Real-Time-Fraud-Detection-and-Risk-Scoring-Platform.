@@ -15,7 +15,7 @@ from backend.app.core.config import (
 )
 from backend.app.core.rate_limit import TokenBucketLimiter
 from backend.app.db.session import init_db
-from backend.app.api.routes import health, predict, transactions, analytics, monitoring
+from backend.app.api.routes import health, predict, transactions, analytics, monitoring, batch
 
 logger = logging.getLogger("transactionshield")
 
@@ -113,5 +113,5 @@ async def guard(request: Request, call_next):
             (time.monotonic() - started) * 1000, request_id,
         )
 
-for route in (health, predict, transactions, analytics, monitoring):
+for route in (health, predict, transactions, analytics, monitoring, batch):
     app.include_router(route.router)

@@ -120,3 +120,13 @@ POST to `/predict` and inspect `fraud_probability`, `risk_score` (0–100), `ris
 - **Implemented expansion:** Initial Alembic schema, health/readiness, synthetic drift monitoring and bounded review feedback, security defaults, monitoring UI, optional Kafka-compatible demo integration.
 - **Implemented evaluation/deployment expansion:** strict authorized CSV contract, frozen-model external holdout report with bootstrap intervals, streaming request-byte ceiling, offline static React preview, Pages publishing workflow, and optional Render API+PostgreSQL staging blueprint. These require real owner configuration to publish/run.
 - **Production blockers:** Consented labeled data and validation, calibration, tenant-aware identity, encryption and gateway policies, real backup/restore, hosted cloud infrastructure, managed event ingestion, independent audits, monitoring alerts and operational approvals. These cannot be claimed complete.
+
+## Latest portfolio enhancements — batch scoring and decision analysis
+
+- `POST /predict/batch` securely validates and atomically persists **1–25** synthetic transactions; duplicate inputs, scoring errors and invalid payloads never produce partial DB writes. See [API guide](docs/API_REFERENCE.md).
+- Run `python scripts/decision_costs.py` to generate [review-cost sensitivity chart](artifacts/reports/review_cost_sensitivity.svg) from the **recorded synthetic test confusion matrix**. It illustrates hypothetical review costs while keeping the threshold fixed. These are **not estimated fraud losses** or a trained cost model.
+- `pytest -q` and GitHub CI cover batch persistence, duplicate protection, failure rollback, data constraints and scenario math.
+
+![Illustrative synthetic review-cost sensitivity](artifacts/reports/review_cost_sensitivity.svg)
+
+See [Demo walkthrough](docs/PORTFOLIO_DEMO.md) and [Decision-analysis explanation](docs/DECISION_ANALYSIS.md).

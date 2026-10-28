@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1050" height="560" viewBox="0 0 1050 560" role="img" aria-labelledby="t d">
+<title id="t">Synthetic fraud-review cost sensitivity</title>
+<desc id="d">Fixed holdout confusion matrix under different hypothetical missed-fraud penalty assumptions. Illustrative only, not real loss estimates or threshold optimization.</desc>
+<rect width="1050" height="560" rx="18" fill="#0b1731"/>
+<text x="40" y="52" fill="#f2f6ff" font-family="Arial, sans-serif" font-size="31" font-weight="700">Review Cost Sensitivity</text>
+<text x="40" y="84" fill="#abc2e8" font-family="Arial, sans-serif" font-size="16">Fixed model threshold • synthetic holdout only • illustrative cost units</text>
+<line x1="94" x2="954" y1="450.0" y2="450.0" stroke="#263653" stroke-width="1"/>
+<text x="79" y="455.0" text-anchor="end" fill="#abc2e8" font-family="Arial, sans-serif" font-size="13">0</text>
+<line x1="94" x2="954" y1="370.0" y2="370.0" stroke="#263653" stroke-width="1"/>
+<text x="79" y="375.0" text-anchor="end" fill="#abc2e8" font-family="Arial, sans-serif" font-size="13">281</text>
+<line x1="94" x2="954" y1="290.0" y2="290.0" stroke="#263653" stroke-width="1"/>
+<text x="79" y="295.0" text-anchor="end" fill="#abc2e8" font-family="Arial, sans-serif" font-size="13">562</text>
+<line x1="94" x2="954" y1="210.0" y2="210.0" stroke="#263653" stroke-width="1"/>
+<text x="79" y="215.0" text-anchor="end" fill="#abc2e8" font-family="Arial, sans-serif" font-size="13">843</text>
+<line x1="94" x2="954" y1="130.0" y2="130.0" stroke="#263653" stroke-width="1"/>
+<text x="79" y="135.0" text-anchor="end" fill="#abc2e8" font-family="Arial, sans-serif" font-size="13">1124</text>
+<rect x="130.1" y="415.3" width="99.8" height="34.7" rx="3" fill="#20bed1"/>
+<rect x="130.1" y="405.0" width="99.8" height="10.2" rx="3" fill="#f99465"/>
+<text x="180.0" y="395.0" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="14" font-weight="700">158</text>
+<text x="180.0" y="477.0" text-anchor="middle" fill="#dce7f8" font-family="Arial, sans-serif" font-size="16">2×</text>
+<rect x="302.1" y="415.3" width="99.8" height="34.7" rx="3" fill="#20bed1"/>
+<rect x="302.1" y="389.7" width="99.8" height="25.6" rx="3" fill="#f99465"/>
+<text x="352.0" y="379.7" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="14" font-weight="700">212</text>
+<text x="352.0" y="477.0" text-anchor="middle" fill="#dce7f8" font-family="Arial, sans-serif" font-size="16">5×</text>
+<rect x="474.1" y="415.3" width="99.8" height="34.7" rx="3" fill="#20bed1"/>
+<rect x="474.1" y="364.0" width="99.8" height="51.2" rx="3" fill="#f99465"/>
+<text x="524.0" y="354.0" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="14" font-weight="700">302</text>
+<text x="524.0" y="477.0" text-anchor="middle" fill="#dce7f8" font-family="Arial, sans-serif" font-size="16">10×</text>
+<rect x="646.1" y="415.3" width="99.8" height="34.7" rx="3" fill="#20bed1"/>
+<rect x="646.1" y="287.2" width="99.8" height="128.1" rx="3" fill="#f99465"/>
+<text x="696.0" y="277.2" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="14" font-weight="700">572</text>
+<text x="696.0" y="477.0" text-anchor="middle" fill="#dce7f8" font-family="Arial, sans-serif" font-size="16">25×</text>
+<rect x="818.1" y="415.3" width="99.8" height="34.7" rx="3" fill="#20bed1"/>
+<rect x="818.1" y="159.1" width="99.8" height="256.2" rx="3" fill="#f99465"/>
+<text x="868.0" y="149.1" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="14" font-weight="700">1022</text>
+<text x="868.0" y="477.0" text-anchor="middle" fill="#dce7f8" font-family="Arial, sans-serif" font-size="16">50×</text>
+<rect x="218" y="502" width="16" height="16" rx="3" fill="#20bed1"/>
+<text x="244" y="516" fill="#cbdcf4" font-family="Arial, sans-serif" font-size="15">Review cost (1 unit per flag)</text>
+<rect x="536" y="502" width="16" height="16" rx="3" fill="#f99465"/>
+<text x="562" y="516" fill="#cbdcf4" font-family="Arial, sans-serif" font-size="15">Missed positive penalty</text>
+<text x="40" y="547" fill="#8299ba" font-family="Arial, sans-serif" font-size="12">No real banking data • 21 synthetic positive labels • not a financial impact estimate</text>
+</svg>

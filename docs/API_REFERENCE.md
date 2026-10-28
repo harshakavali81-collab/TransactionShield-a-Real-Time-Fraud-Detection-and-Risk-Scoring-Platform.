@@ -32,3 +32,11 @@ The optional `X-API-Key` header authenticates the API when `API_KEY` is configur
 ## Optional synthetic-demo request throttling
 
 Set `DEMO_RATE_LIMIT` to a positive number of requests/minute to enable a **per-process, per-transport-peer** token bucket for non-health API calls. When exceeded, return `429 {"detail":"Demo request limit exceeded"}` and a positive `Retry-After` header in seconds. `OPTIONS` preflight and `/health`/`/ready` are exempt. The default is disabled. In deployment, reverse proxies can cause users to share a peer address, and separate processes have independent buckets. Use authenticated, distributed edge throttling in any public/multi-user service.
+
+## Atomic batch scoring (synthetic demonstration)
+
+`POST /predict/batch` accepts `{ "transactions": [ ... ] }`, containing **1–25** objects with exactly the same fields as `POST /predict`. The endpoint returns HTTP 201 with `{ "count": N, "demo_only": true, "results": [...] }`. All rows are scored and committed in one database transaction; malformed input returns 422, duplicate IDs return 409, and an unavailable/corrupt model returns 503 **without persisting any batch members**. No partial successes are returned. The general 16 KB request-body limit still applies. This is a teaching example, **not** an authorized bulk bank-data feed.
+
+```bash
+curl -X POST http://localhost:8000/predict/batch -H 'Content-Type: application/json' -d '{"transactions":[{"amount":1500,"hour":2,"account_age_days":10,"velocity_24h":11,"prior_chargebacks":1,"ip_risk_score":0.85,"is_international":1,"is_new_device":1,"merchant_category":"gaming","transaction_type":"card"}]}'
+```
