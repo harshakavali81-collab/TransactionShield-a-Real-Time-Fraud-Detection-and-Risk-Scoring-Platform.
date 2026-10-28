@@ -1,0 +1,26 @@
+{
+  "project": "TransactionShield",
+  "scope": "synthetic temporary SQLite demo",
+  "status": "passed",
+  "check_count": 14,
+  "checks": [
+    "public health",
+    "public readiness",
+    "protected routes reject missing key",
+    "protected model metrics",
+    "single scored and stored",
+    "atomic batch scored",
+    "duplicate batch rejected",
+    "failed batch does not persist",
+    "audited transaction readable",
+    "demo feedback stored",
+    "demo feedback provenance",
+    "monitoring available",
+    "statistics match stored rows",
+    "unauthenticated model metrics blocked"
+  ],
+  "records_persisted_after_run": 0,
+  "real_financial_data": false,
+  "external_bank_integration": false,
+  "production_approved": false
+}

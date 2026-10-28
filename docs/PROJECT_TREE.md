@@ -1,140 +1,230 @@
-# TransactionShield repository tree
+# TransactionShield repository structure
 
-The tree below reflects the GitHub source package. Generated synthetic CSVs and local caches are intentionally excluded.
+Generated from source files by `python scripts/generate_project_tree.py`. Generated raw data, local databases, dependency caches, and credentials are excluded.
 
 ```text
 TransactionShield/
-  .dockerignore
-  .env.example
-  .github/workflows/ci.yml
-  .gitignore
-  Makefile
-  README.md
-  artifacts/models/.gitkeep
-  artifacts/models/fraud_model.joblib
-  artifacts/models/metrics.json
-  artifacts/reports/.gitkeep
-  artifacts/reports/confusion_matrix.png
-  artifacts/reports/eda_summary.json
-  artifacts/reports/model_comparison.png
-  artifacts/reports/precision_recall.png
-  artifacts/reports/shap_summary.png
-  artifacts/reports/synthetic_amounts.png
-  backend/Dockerfile
-  backend/__init__.py
-  backend/app/__init__.py
-  backend/app/api/__init__.py
-  backend/app/api/routes/__init__.py
-  backend/app/api/routes/analytics.py
-  backend/app/api/routes/health.py
-  backend/app/api/routes/predict.py
-  backend/app/api/routes/transactions.py
-  backend/app/core/__init__.py
-  backend/app/core/config.py
-  backend/app/core/logging_config.py
-  backend/app/db/__init__.py
-  backend/app/db/models.py
-  backend/app/db/repository.py
-  backend/app/db/session.py
-  backend/app/main.py
-  backend/app/schemas/__init__.py
-  backend/app/schemas/prediction.py
-  backend/app/schemas/transaction.py
-  backend/app/services/__init__.py
-  backend/app/services/prediction_service.py
-  backend/app/services/risk_scoring.py
-  backend/tests/test_health.py
-  backend/tests/test_predict.py
-  backend/tests/test_transactions.py
-  data/README.md
-  data/interim/.gitkeep
-  data/processed/.gitkeep
-  data/raw/.gitkeep
-  docker-compose.yml
-  docs/API_REFERENCE.md
-  docs/ARCHITECTURE.md
-  docs/DEPLOYMENT.md
-  docs/MODEL_CARD.md
-  docs/PROJECT_WORKFLOW.md
-  docs/TEST_PLAN.md
-  docs/screenshots/.gitkeep
-  docs/screenshots/transactionshield-architecture.png
-  frontend/.dockerignore
-  frontend/Dockerfile
-  frontend/index.html
-  frontend/nginx.conf
-  frontend/package.json
-  frontend/src/App.jsx
-  frontend/src/api/client.js
-  frontend/src/components/FraudChart.jsx
-  frontend/src/components/MetricCard.jsx
-  frontend/src/components/Navbar.jsx
-  frontend/src/components/RiskBadge.jsx
-  frontend/src/components/TransactionForm.jsx
-  frontend/src/components/TransactionTable.jsx
-  frontend/src/main.jsx
-  frontend/src/pages/Analytics.jsx
-  frontend/src/pages/Dashboard.jsx
-  frontend/src/pages/ModelPerformance.jsx
-  frontend/src/pages/Predict.jsx
-  frontend/src/pages/Transactions.jsx
-  frontend/src/styles/global.css
-  frontend/vite.config.js
-  ml/__init__.py
-  ml/config.py
-  ml/data/__init__.py
-  ml/data/feature_engineering.py
-  ml/data/generate.py
-  ml/data/load_data.py
-  ml/data/preprocess.py
-  ml/data/validate_data.py
-  ml/explainability/__init__.py
-  ml/explainability/shap_explainer.py
-  ml/monitoring/__init__.py
-  ml/monitoring/data_drift.py
-  ml/monitoring/model_metrics.py
-  ml/training/__init__.py
-  ml/training/evaluate.py
-  ml/training/save_model.py
-  ml/training/train.py
-  ml/training/tune.py
-  notebooks/01_data_exploration.ipynb
-  notebooks/02_data_preprocessing.ipynb
-  notebooks/03_baseline_model.ipynb
-  notebooks/04_model_comparison.ipynb
-  pyproject.toml
-  requirements-dev.txt
-  requirements.txt
-  scripts/__init__.py
-  scripts/bootstrap.py
-  scripts/create_report.py
-  scripts/eda.py
-  scripts/generate_demo.py
-  scripts/simulate_stream.py
-  tests/conftest.py
-  tests/test_data.py
-  tests/test_explainability.py
-  tests/test_pipeline_integration.py
-  tests/test_preprocessing.py
-  tests/test_training.py
+├── .github
+│   └── workflows
+│       ├── ci.yml
+│       └── pages-demo.yml
+├── artifacts
+│   ├── models
+│   │   ├── .gitkeep
+│   │   ├── fraud_model.joblib
+│   │   ├── metrics.json
+│   │   └── model_manifest.json
+│   └── reports
+│       ├── .gitkeep
+│       ├── confusion_matrix.png
+│       ├── eda_summary.json
+│       ├── end_to_end_smoke.json
+│       ├── model_comparison.png
+│       ├── precision_recall.png
+│       ├── review_cost_sensitivity.svg
+│       ├── shap_summary.png
+│       └── synthetic_amounts.png
+├── backend
+│   ├── app
+│   │   ├── api
+│   │   │   ├── routes
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── analytics.py
+│   │   │   │   ├── batch.py
+│   │   │   │   ├── health.py
+│   │   │   │   ├── monitoring.py
+│   │   │   │   ├── predict.py
+│   │   │   │   └── transactions.py
+│   │   │   └── __init__.py
+│   │   ├── core
+│   │   │   ├── __init__.py
+│   │   │   ├── config.py
+│   │   │   ├── logging_config.py
+│   │   │   └── rate_limit.py
+│   │   ├── db
+│   │   │   ├── __init__.py
+│   │   │   ├── models.py
+│   │   │   ├── repository.py
+│   │   │   └── session.py
+│   │   ├── schemas
+│   │   │   ├── __init__.py
+│   │   │   ├── prediction.py
+│   │   │   └── transaction.py
+│   │   ├── services
+│   │   │   ├── __init__.py
+│   │   │   ├── prediction_service.py
+│   │   │   └── risk_scoring.py
+│   │   ├── __init__.py
+│   │   └── main.py
+│   ├── tests
+│   │   ├── test_auth.py
+│   │   ├── test_batch.py
+│   │   ├── test_health.py
+│   │   ├── test_metrics_integrity.py
+│   │   ├── test_model_fail_closed.py
+│   │   ├── test_monitoring.py
+│   │   ├── test_predict.py
+│   │   ├── test_rate_limit.py
+│   │   ├── test_security.py
+│   │   └── test_transactions.py
+│   ├── __init__.py
+│   └── Dockerfile
+├── data
+│   ├── interim
+│   │   └── .gitkeep
+│   ├── processed
+│   │   └── .gitkeep
+│   ├── raw
+│   │   └── .gitkeep
+│   └── README.md
+├── deploy
+│   ├── production.env.example
+│   └── render.yaml
+├── docs
+│   ├── screenshots
+│   │   ├── .gitkeep
+│   │   └── transactionshield-architecture.png
+│   ├── visuals
+│   │   ├── dashboard-concept.svg
+│   │   ├── evaluation-summary.svg
+│   │   ├── hero-banner.svg
+│   │   ├── model-benchmark.svg
+│   │   ├── readiness-roadmap.svg
+│   │   └── system-architecture.svg
+│   ├── API_REFERENCE.md
+│   ├── ARCHITECTURE.md
+│   ├── CLOUD_STAGING.md
+│   ├── DECISION_ANALYSIS.md
+│   ├── DEMO_BACKUP_RECOVERY.md
+│   ├── DEMO_DATA_RETENTION.md
+│   ├── DEPLOYMENT.md
+│   ├── END_TO_END_VERIFICATION.md
+│   ├── INDEPENDENT_VALIDATION.md
+│   ├── INTEGRATION_CONTRACT.md
+│   ├── MODEL_CARD.md
+│   ├── MODEL_INTEGRITY.md
+│   ├── OPERATIONS.md
+│   ├── PORTFOLIO_DEMO.md
+│   ├── PRODUCTION_GAP_ANALYSIS.md
+│   ├── PROJECT_TREE.md
+│   ├── PROJECT_WORKFLOW.md
+│   ├── PUBLIC_DEMO.md
+│   ├── RELEASE_PROCESS.md
+│   ├── RESULTS.md
+│   ├── SECURITY.md
+│   ├── TEST_PLAN.md
+│   └── VISUAL_GALLERY.md
+├── frontend
+│   ├── src
+│   │   ├── api
+│   │   │   ├── client.js
+│   │   │   └── staticDemo.js
+│   │   ├── components
+│   │   │   ├── FraudChart.jsx
+│   │   │   ├── MetricCard.jsx
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── RiskBadge.jsx
+│   │   │   ├── TransactionForm.jsx
+│   │   │   └── TransactionTable.jsx
+│   │   ├── pages
+│   │   │   ├── Analytics.jsx
+│   │   │   ├── Dashboard.jsx
+│   │   │   ├── ModelPerformance.jsx
+│   │   │   ├── Monitoring.jsx
+│   │   │   ├── Predict.jsx
+│   │   │   └── Transactions.jsx
+│   │   ├── styles
+│   │   │   └── global.css
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── .dockerignore
+│   ├── Dockerfile
+│   ├── index.html
+│   ├── nginx.conf
+│   ├── package.json
+│   └── vite.config.js
+├── migrations
+│   ├── versions
+│   │   ├── 0001_initial_schema.py
+│   │   └── 0002_monitoring_feedback.py
+│   └── env.py
+├── ml
+│   ├── data
+│   │   ├── __init__.py
+│   │   ├── feature_engineering.py
+│   │   ├── generate.py
+│   │   ├── load_data.py
+│   │   ├── partner_contract.py
+│   │   ├── preprocess.py
+│   │   └── validate_data.py
+│   ├── explainability
+│   │   ├── __init__.py
+│   │   └── shap_explainer.py
+│   ├── monitoring
+│   │   ├── __init__.py
+│   │   ├── data_drift.py
+│   │   └── model_metrics.py
+│   ├── training
+│   │   ├── __init__.py
+│   │   ├── evaluate.py
+│   │   ├── independent_validation.py
+│   │   ├── model_integrity.py
+│   │   ├── save_model.py
+│   │   ├── train.py
+│   │   └── tune.py
+│   ├── __init__.py
+│   └── config.py
+├── notebooks
+│   ├── 01_data_exploration.ipynb
+│   ├── 02_data_preprocessing.ipynb
+│   ├── 03_baseline_model.ipynb
+│   └── 04_model_comparison.ipynb
+├── scripts
+│   ├── __init__.py
+│   ├── backup_demo_sqlite.py
+│   ├── bootstrap.py
+│   ├── check_release.py
+│   ├── create_report.py
+│   ├── decision_costs.py
+│   ├── eda.py
+│   ├── generate_demo.py
+│   ├── generate_project_tree.py
+│   ├── purge_demo_data.py
+│   ├── simulate_stream.py
+│   ├── smoke_e2e.py
+│   ├── upgrade_legacy_database.py
+│   ├── validate_partner_feed.py
+│   └── verify_model_artifact.py
+├── streaming
+│   ├── __init__.py
+│   ├── consumer.py
+│   └── producer.py
+├── tests
+│   ├── conftest.py
+│   ├── test_data.py
+│   ├── test_decision_costs.py
+│   ├── test_demo_backup.py
+│   ├── test_demo_retention.py
+│   ├── test_explainability.py
+│   ├── test_managed_db_config.py
+│   ├── test_migrations.py
+│   ├── test_model_integrity.py
+│   ├── test_partner_and_holdout.py
+│   ├── test_pipeline_integration.py
+│   ├── test_preprocessing.py
+│   ├── test_streaming.py
+│   └── test_training.py
+├── .dockerignore
+├── .env.example
+├── .gitignore
+├── alembic.ini
+├── docker-compose.yml
+├── Makefile
+├── pyproject.toml
+├── README.md
+├── requirements-dev.txt
+├── requirements-streaming.txt
+└── requirements.txt
 ```
 
-See [architecture](ARCHITECTURE.md), [workflow](PROJECT_WORKFLOW.md), and [deployment](DEPLOYMENT.md).
-
-
-## Upgrade additions (October 2026)
-- `migrations/versions/`: versioned legacy-compatible base schema and monitoring upgrade
-- `backend/app/api/routes/monitoring.py`: demo drift monitoring, reviewer feedback API
-- `frontend/src/pages/Monitoring.jsx`: drift and monitoring interface
-- `streaming/producer.py`, `streaming/consumer.py`: optional Kafka-compatible local synthetic stream
-- `scripts/check_release.py`: release readiness smoke check
-- `scripts/upgrade_legacy_database.py`: backup-gated unversioned schema upgrade
-- `docs/SECURITY.md`, `docs/OPERATIONS.md`, `docs/PRODUCTION_GAP_ANALYSIS.md`: operational documentation
-
-### Safety/deployment extensions
-- `ml/data/partner_contract.py` — authorized local CSV schema and privacy boundary.
-- `ml/training/independent_validation.py` — frozen model external holdout evaluation and uncertainty report.
-- `frontend/src/api/staticDemo.js` — fictional offline UI preview (not model inference).
-- `.github/workflows/pages-demo.yml` — Pages build/deploy, requires Pages enabled.
-- `deploy/render.yaml` — optional protected Render cloud staging, requires provider account.
-- `docs/{PUBLIC_DEMO,CLOUD_STAGING,INTEGRATION_CONTRACT,INDEPENDENT_VALIDATION}.md` — setup and limitations.
+The ML pipeline is under `ml/`, the protected API is under `backend/`, the React interface is under `frontend/`, and independent checks, architecture diagrams, deployment instructions, and reproducible synthetic evaluation evidence are under `tests/`, `docs/`, `.github/`, and `artifacts/`.

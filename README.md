@@ -35,6 +35,8 @@ TransactionShield scores synthetic credit card, wallet, transfer, and e-commerce
 - Optional bounded per-peer demonstration rate limiting (`DEMO_RATE_LIMIT`, HTTP 429 with `Retry-After`); **not** a production gateway.
 - React / Recharts: Overview, Scoring, Transactions with CSV export, Analytics, Model Performance.
 - Tests, architecture docs, workflows, reproducible charts, Docker Compose, local simulator.
+- Ephemeral authenticated end-to-end API smoke check with 14 cross-component assertions and zero persisted customer or test data.
+- Guarded SQLite-only synthetic backup demonstration with dry-run, schema checks, no overwrite, and verified snapshot counts.
 - Alembic migration, readiness checks, request-security guardrails, drift monitoring API and React monitoring tab.
 - Optional Kafka-compatible synthetic producer/consumer with at-least-once offset commits.
 - Clear demo-review feedback provenance and operational deployment/security runbooks.
@@ -104,6 +106,8 @@ POST to `/predict` and inspect `fraud_probability`, `risk_score` (0–100), `ris
 - [Model card, limitations & dataset provenance](docs/MODEL_CARD.md)
 - [Deployment instructions](docs/DEPLOYMENT.md)
 - [Test plan](docs/TEST_PLAN.md)
+- [End-to-end API verification and reproducible report](docs/END_TO_END_VERIFICATION.md)
+- [Local fictional SQLite backup and recovery drill](docs/DEMO_BACKUP_RECOVERY.md)
 - [Security policy & threat model](docs/SECURITY.md)
 - [Safe cleanup for synthetic demo records](docs/DEMO_DATA_RETENTION.md)
 - [Operational runbook and optional Kafka](docs/OPERATIONS.md)

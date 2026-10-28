@@ -29,6 +29,20 @@ jobs:
           alembic upgrade head
           python scripts/check_release.py
           python scripts/purge_demo_data.py --days 30
+      - name: Authenticated ephemeral end-to-end API smoke test
+        run: python scripts/smoke_e2e.py --report artifacts/reports/end_to_end_smoke.json
+      - name: Verify fictional SQLite backup and recovery counts
+        env:
+          ENVIRONMENT: test
+          DATABASE_URL: sqlite:////tmp/transactionshield-ci-migrate.sqlite3
+        run: |
+          python scripts/backup_demo_sqlite.py --source /tmp/transactionshield-ci-migrate.sqlite3 --output /tmp/transactionshield-ci-backup.sqlite3
+          python scripts/backup_demo_sqlite.py --source /tmp/transactionshield-ci-migrate.sqlite3 --output /tmp/transactionshield-ci-backup.sqlite3 --confirm-synthetic-only
+      - name: Upload end-to-end verification evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: synthetic-e2e-evidence
+          path: artifacts/reports/end_to_end_smoke.json
       - name: Validate Docker Compose configuration
         run: docker compose --profile streaming config --quiet
       - name: Train on fresh synthetic data

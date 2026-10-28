@@ -21,3 +21,10 @@ Not yet covered: performance/load testing, protected payment data handling, real
 - Migrations: `alembic upgrade head` plus API release smoke tests in GitHub Actions
 - Frontend: production asset compilation with `npm run build` in GitHub Actions
 These tests do not replace host-level Kafka, cloud deployment, pentest or real-data backtesting.
+
+## Full workflow and snapshot recovery (additional checks)
+
+- `python scripts/smoke_e2e.py --report artifacts/reports/end_to_end_smoke.json` creates and migrates an isolated temporary SQLite DB, requires API-key authentication on protected endpoints, verifies the full single/batch scoring and review journey, and removes all data after testing.
+- `python scripts/backup_demo_sqlite.py --source ./transactionshield.sqlite3 --output ./demo-snapshot.sqlite3` previews a consistent local demo-only backup. Add `--confirm-synthetic-only` to write a new verified snapshot; production environments and existing destinations are refused.
+- The CI workflow runs both the ephemeral API smoke test and a synthetic SQLite backup snapshot check, and uploads an end-to-end evidence JSON report.
+- Neither check establishes compliance with payment/financial regulations or substitutes for a managed PostgreSQL PITR backup and restore test.
