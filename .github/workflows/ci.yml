@@ -127,7 +127,7 @@ jobs:
       - name: Build FastAPI model-serving image
         run: docker build --file backend/Dockerfile --tag transactionshield-backend:ci .
       - name: Build React/Nginx image
-        run: docker build --file frontend/Dockerfile --tag transactionshield-frontend:ci frontend/
+        run: docker build --file frontend/Dockerfile --tag transactionshield-frontend:ci .
   source-bundle:
     name: Archive tested source
     if: github.event_name == 'push'

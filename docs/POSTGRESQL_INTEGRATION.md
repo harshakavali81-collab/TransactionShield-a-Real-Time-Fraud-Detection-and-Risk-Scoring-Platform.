@@ -19,3 +19,5 @@ The new script `python scripts/smoke_postgres.py --report artifacts/reports/post
 4. Run `python scripts/smoke_postgres.py --report artifacts/reports/postgres_ci_smoke.json`.
 
 Never point this script at an actual bank dataset or any existing environment that must be preserved. Integration report artifacts do not contain customer records or credentials.
+
+The React Dockerfile requires the repository-root build context because the static preview imports the checked-in synthetic evaluation metrics. Use `docker build -f frontend/Dockerfile -t transactionshield-frontend:ci .` (not a build context of `frontend/`). Docker Compose is configured accordingly.
