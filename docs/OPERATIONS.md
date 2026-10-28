@@ -10,6 +10,7 @@
 - Model unavailable: retrain offline and redeploy trusted model artifact; do not download unknown joblib files.
 - Database connection refused: check DATABASE_URL and PostgreSQL health. Stop write traffic before applying migration changes. Back up DB before upgrading.
 - API 401: valid gateway-injected `X-API-Key` missing; never hardcode real keys into web bundles.
+- API 429: the optional per-instance peer demo token bucket is exhausted; honor `Retry-After`. Behind a reverse proxy, all callers may share one peer address; use a trusted gateway with identity-aware distributed limits and do not rely on this mechanism for production security.
 - 409 duplicate: transaction_id already exists; consumers treat the duplicate as an at-least-once delivery, but audit the source before replaying real messages.
 - Drift mean-shift alert: investigate input distribution and upstream changes; **not** direct evidence of fraud or a retraining trigger by itself.
 - Missing confirmed labels: true live precision/recall cannot be inferred from reviews or model scores.

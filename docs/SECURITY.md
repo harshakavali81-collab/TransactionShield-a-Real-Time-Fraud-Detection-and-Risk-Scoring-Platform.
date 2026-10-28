@@ -5,7 +5,9 @@
 ## Defenses added
 - Environment validation makes an accidental production launch fail without a >=32-character API key, HTTPS-only explicit CORS origins and PostgreSQL.
 - Timing-resistant shared key comparison (`X-API-Key`); this is **not** user login, RBAC or tenancy. Public `/health` and `/ready` reveal no customer data. Docs are disabled in production configuration.
-- Endpoint input validation via Pydantic; reject most oversized request bodies by their content-length; retain bounded history/monitoring queries. A gateway must additionally enforce streamed-body caps and request-rate controls.
+- Endpoint input validation via Pydantic; enforce byte limits for both declared and streamed bodies; retain bounded history/monitoring queries.
+- Optional `DEMO_RATE_LIMIT` token bucket per transport peer and process (default 0, examples 60/minute), with 429 + `Retry-After`. Public `/health`, `/ready`, and CORS preflight are exempt. Client-supplied forwarding headers are ignored. Storage is capped to 4096 peer entries.
+- This is **not distributed**, not authenticated per-user, and can group users behind the same NAT or proxy. Require a trusted identity-aware rate-limiting gateway/WAF for internet-facing traffic.
 - SQLAlchemy parameterized queries, duplicate transaction ID rejection, simple response hardening headers, request IDs and latency logging without payload content.
 - A synthetic feature snapshot supports drift visualization; do not store equivalent raw fields for actual users without legal, retention and minimization design.
 - Feedback entries are explicitly unverified human review examples; the API never calls them verified fraud ground truth.

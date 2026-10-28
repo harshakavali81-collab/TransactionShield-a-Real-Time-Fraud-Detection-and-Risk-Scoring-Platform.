@@ -32,6 +32,7 @@ TransactionShield scores synthetic credit card, wallet, transfer, and e-commerce
 - Optional tree SHAP summary function and MLflow tracking. UI review hints are separate explicit rules.
 - FastAPI: `/predict`, `/history`, `/transactions/{id}`, `/statistics`, `/analytics`, `/metrics`, `/health`, and `/docs`.
 - Pydantic constraints, duplicate transaction ID protection, SQLite development fallback, PostgreSQL Docker service.
+- Optional bounded per-peer demonstration rate limiting (`DEMO_RATE_LIMIT`, HTTP 429 with `Retry-After`); **not** a production gateway.
 - React / Recharts: Overview, Scoring, Transactions with CSV export, Analytics, Model Performance.
 - Tests, architecture docs, workflows, reproducible charts, Docker Compose, local simulator.
 - Alembic migration, readiness checks, request-security guardrails, drift monitoring API and React monitoring tab.
@@ -44,6 +45,10 @@ TransactionShield scores synthetic credit card, wallet, transfer, and e-commerce
 - Docker **does not retrain at build time**. Explicit training updates the model, metrics, and manifest together. The API fails closed with HTTP 503 for corrupt model output.
 - Run `python scripts/verify_model_artifact.py` to check consistency. SHA-256 is **not** a digital signature, a guarantee against malicious pickle contents, or evidence of real fraud-detection performance.
 - [Model integrity and release guide](docs/MODEL_INTEGRITY.md)
+
+## Demo API request limits
+
+For local testing, set `DEMO_RATE_LIMIT=60` to allow bursts of up to 60 requests per minute per transport peer per application process. The in-memory token bucket refills gradually and returns HTTP 429 with `Retry-After` when exhausted; the default `0` disables it. Liveness/readiness and CORS preflight are not charged. This limiter cannot coordinate across workers and must **not** replace a production reverse-proxy/WAF/distributed quota system. See [security boundaries](docs/SECURITY.md).
 
 ## Quickstart (Python 3.11 recommended, Node.js 20+)
 ```bash

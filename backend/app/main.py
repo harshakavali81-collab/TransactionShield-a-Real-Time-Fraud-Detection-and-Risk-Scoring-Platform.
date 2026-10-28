@@ -10,8 +10,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from backend.app.core.config import (
-    API_KEY, CORS_ORIGINS, ENVIRONMENT, MAX_REQUEST_BYTES, validate_configuration,
+    API_KEY, CORS_ORIGINS, ENVIRONMENT, MAX_REQUEST_BYTES, DEMO_RATE_LIMIT,
+    validate_configuration,
 )
+from backend.app.core.rate_limit import TokenBucketLimiter
 from backend.app.db.session import init_db
 from backend.app.api.routes import health, predict, transactions, analytics, monitoring
 
@@ -39,42 +41,64 @@ app.add_middleware(
 )
 
 
+rate_limiter = TokenBucketLimiter()
+
+
 @app.middleware("http")
 async def guard(request: Request, call_next):
     request_id = str(uuid.uuid4())
     started = time.monotonic()
     status = 500
+
+    def reject(code: int, detail: str, retry_after: int = 0):
+        response = JSONResponse(status_code=code, content={"detail": detail})
+        response.headers["X-Request-ID"] = request_id
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["Referrer-Policy"] = "no-referrer"
+        response.headers["Cache-Control"] = "no-store"
+        if retry_after:
+            response.headers["Retry-After"] = str(retry_after)
+        return response
+
     try:
+        path = request.url.path
+        public = path in {"/health", "/ready"}
+        preflight = request.method == "OPTIONS"
+
+        # Reject declared oversized requests without consuming memory.
         if request.method in {"POST", "PUT", "PATCH"}:
             declared = request.headers.get("content-length")
             if declared and (not declared.isdecimal() or int(declared) > MAX_REQUEST_BYTES):
-                response = JSONResponse(status_code=413, content={"detail": "Request too large"})
-                response.headers["X-Request-ID"] = request_id
-                response.headers["Cache-Control"] = "no-store"
                 status = 413
-                return response
-            # Enforce a real byte cap even if Content-Length was omitted/forged.
-            # This demo deliberately accepts only small JSON bodies.
+                return reject(413, "Request too large")
+
+        # Per-peer in-memory demo limiter, not per-account or distributed.
+        # Never trust arbitrary X-Forwarded-For client-supplied headers.
+        if not public and not preflight and DEMO_RATE_LIMIT > 0:
+            peer = request.client.host if request.client else "unknown"
+            retry_after = rate_limiter.consume(peer, DEMO_RATE_LIMIT)
+            if retry_after:
+                status = 429
+                return reject(429, "Demo request limit exceeded", retry_after)
+
+        if API_KEY and not public and not preflight:
+            supplied = request.headers.get("x-api-key", "")
+            if not hmac.compare_digest(supplied, API_KEY):
+                status = 401
+                return reject(401, "Unauthorized")
+
+        if request.method in {"POST", "PUT", "PATCH"}:
+            # Cap streamed and transfer-encoded bodies too.
             chunks = []
             byte_count = 0
             async for chunk in request.stream():
                 byte_count += len(chunk)
                 if byte_count > MAX_REQUEST_BYTES:
-                    response = JSONResponse(status_code=413, content={"detail": "Request too large"})
-                    response.headers["X-Request-ID"] = request_id
-                    response.headers["Cache-Control"] = "no-store"
                     status = 413
-                    return response
+                    return reject(413, "Request too large")
                 chunks.append(chunk)
             request._body = b"".join(chunks)
-        public = {"/health", "/ready"}
-        if API_KEY and request.url.path not in public:
-            supplied = request.headers.get("x-api-key", "")
-            if not hmac.compare_digest(supplied, API_KEY):
-                response = JSONResponse(status_code=401, content={"detail": "Unauthorized"})
-                response.headers["X-Request-ID"] = request_id
-                response.headers["Cache-Control"] = "no-store"
-                return response
+
         response = await call_next(request)
         status = response.status_code
         response.headers["X-Request-ID"] = request_id
@@ -83,10 +107,11 @@ async def guard(request: Request, call_next):
         response.headers["Cache-Control"] = "no-store"
         return response
     finally:
-        logger.info("request method=%s path=%s status=%d elapsed_ms=%.1f request_id=%s",
-                    request.method, request.url.path, status,
-                    (time.monotonic() - started) * 1000, request_id)
-
+        logger.info(
+            "request method=%s path=%s status=%d elapsed_ms=%.1f request_id=%s",
+            request.method, request.url.path, status,
+            (time.monotonic() - started) * 1000, request_id,
+        )
 
 for route in (health, predict, transactions, analytics, monitoring):
     app.include_router(route.router)

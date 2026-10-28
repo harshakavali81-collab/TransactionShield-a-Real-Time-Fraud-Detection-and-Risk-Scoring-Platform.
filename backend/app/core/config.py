@@ -20,11 +20,13 @@ CORS_ORIGINS = [v.strip() for v in os.getenv("CORS_ORIGINS", "http://localhost:5
 API_KEY = os.getenv("API_KEY", "")
 ENVIRONMENT = os.getenv("ENVIRONMENT", "development").lower()
 MAX_REQUEST_BYTES = int(os.getenv("MAX_REQUEST_BYTES", "16384"))
-DEMO_RATE_LIMIT = int(os.getenv("DEMO_RATE_LIMIT", "0"))  # 0 disables; use an external gateway at scale
+DEMO_RATE_LIMIT = int(os.getenv("DEMO_RATE_LIMIT", "0"))  # per minute, per process, 0 disables
 
 
 def validate_configuration():
     """Refuse to serve unprotected public deployments by accident."""
+    if not 0 <= DEMO_RATE_LIMIT <= 10000:
+        raise RuntimeError("DEMO_RATE_LIMIT must be 0..10000 requests per minute")
     if ENVIRONMENT not in {"development", "test", "production"}:
         raise RuntimeError("ENVIRONMENT must be development, test, or production")
     if ENVIRONMENT == "production":

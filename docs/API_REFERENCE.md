@@ -28,3 +28,7 @@ curl -X POST http://localhost:8000/predict -H 'Content-Type: application/json' -
 - `GET /monitoring/demo-feedback-metrics`: computes provisional metrics against **unverified demonstration reviews only**; never real-world fraud ground truth.
 
 The optional `X-API-Key` header authenticates the API when `API_KEY` is configured. Keep it in a backend proxy or secret manager, not bundled in client-side JavaScript. Production config requires `ENVIRONMENT=production` with an explicit HTTPS CORS origin, a long random API_KEY and PostgreSQL.
+
+## Optional synthetic-demo request throttling
+
+Set `DEMO_RATE_LIMIT` to a positive number of requests/minute to enable a **per-process, per-transport-peer** token bucket for non-health API calls. When exceeded, return `429 {"detail":"Demo request limit exceeded"}` and a positive `Retry-After` header in seconds. `OPTIONS` preflight and `/health`/`/ready` are exempt. The default is disabled. In deployment, reverse proxies can cause users to share a peer address, and separate processes have independent buckets. Use authenticated, distributed edge throttling in any public/multi-user service.
