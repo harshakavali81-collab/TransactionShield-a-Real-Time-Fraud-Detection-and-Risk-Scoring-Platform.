@@ -50,6 +50,12 @@ TransactionShield scores synthetic credit card, wallet, transfer, and e-commerce
 
 For local testing, set `DEMO_RATE_LIMIT=60` to allow bursts of up to 60 requests per minute per transport peer per application process. The in-memory token bucket refills gradually and returns HTTP 429 with `Retry-After` when exhausted; the default `0` disables it. Liveness/readiness and CORS preflight are not charged. This limiter cannot coordinate across workers and must **not** replace a production reverse-proxy/WAF/distributed quota system. See [security boundaries](docs/SECURITY.md).
 
+## Download the tested project source
+
+On every `main` push, GitHub Actions packages an **exact snapshot of the tested source commit** into a ZIP and uploads a SHA-256 checksum, but only if both the Python and React jobs pass.
+Open the [CI build history](https://github.com/harshakavali81-collab/TransactionShield-a-Real-Time-Fraud-Detection-and-Risk-Scoring-Platform./actions/workflows/ci.yml), select a successful run, and download its `TransactionShield-source-...` artifact under **Artifacts**. Retention is 30 days. This is a source bundle—not a verified production deployment.
+See [release process](docs/RELEASE_PROCESS.md).
+
 ## Quickstart (Python 3.11 recommended, Node.js 20+)
 ```bash
 python -m venv .venv

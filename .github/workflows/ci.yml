@@ -53,3 +53,25 @@ jobs:
           node-version: 20
       - run: npm install --no-audit --no-fund
       - run: npm run build
+  source-bundle:
+    name: Archive tested source
+    if: github.event_name == 'push'
+    needs: [python, frontend]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Package exact tested commit
+        run: |
+          git archive --format=zip --output=TransactionShield-source.zip HEAD
+          sha256sum TransactionShield-source.zip > TransactionShield-source.zip.sha256
+          echo "Source archive commit: $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload source bundle and checksum
+        uses: actions/upload-artifact@v4
+        with:
+          name: TransactionShield-source-${{ github.sha }}
+          path: |
+            TransactionShield-source.zip
+            TransactionShield-source.zip.sha256
+          retention-days: 30
