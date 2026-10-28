@@ -8,7 +8,7 @@ A reviewed [Render Blueprint](../deploy/render.yaml) defines a protected, single
 2. Review service and PostgreSQL **plan/pricing**, region, database retention and access restrictions before approving creation. Costs and feature availability may vary.
 3. Render generates a strong `API_KEY` secret and supplies the database connection via `fromDatabase`. **Never put either secret into GitHub or frontend code.** The service normalizes `postgres://`/`postgresql://` to SQLAlchemy's `psycopg` dialect.
 4. Configure permitted CORS origins to a real trusted HTTPS origin. `https://example.invalid` intentionally grants no real frontend origin. For a restricted API-only staging service, this can remain unchanged.
-5. Render builds the Docker image with a synthetic-only demo model, applies Alembic migrations and starts Uvicorn on `$PORT`.
+5. Render uses `ENVIRONMENT=staging`, deliberately not `production`; the project refuses synthetic-only models in production. Render builds the Docker image with a synthetic-only demo model, applies Alembic migrations and starts Uvicorn on `$PORT`.
 6. Test `GET /health` and `GET /ready`; verify that `GET /metrics` returns 401 without `X-API-Key` and succeeds only with the server-side credential. Revoke/rotate secrets if compromised.
 7. Put an identity-aware API gateway before staging users. Add enforced rate limits, durable audit/backup/restore and penetration testing before handling approved sensitive information.
 

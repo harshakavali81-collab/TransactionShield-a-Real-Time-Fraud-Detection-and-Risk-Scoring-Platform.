@@ -1,4 +1,4 @@
-# OPTIONAL protected cloud staging. Sync via Render's Blueprint dashboard.
+# OPTIONAL protected synthetic-only staging; NOT a real financial service. Sync via Render's Blueprint dashboard.
 # A public endpoint is NOT a certified payment-fraud engine.
 services:
   - type: web
@@ -11,7 +11,7 @@ services:
     dockerCommand: sh -c 'alembic upgrade head && exec uvicorn backend.app.main:app --host 0.0.0.0 --port ${PORT:-10000}'
     envVars:
       - key: ENVIRONMENT
-        value: production
+        value: staging
       - key: API_KEY
         generateValue: true
       - key: DEMO_RATE_LIMIT

@@ -65,6 +65,11 @@ On every `main` push, GitHub Actions packages an **exact snapshot of the tested 
 Open the [CI build history](https://github.com/harshakavali81-collab/TransactionShield-a-Real-Time-Fraud-Detection-and-Risk-Scoring-Platform./actions/workflows/ci.yml), select a successful run, and download its `TransactionShield-source-...` artifact under **Artifacts**. Retention is 30 days. This is a source bundle—not a verified production deployment.
 See [release process](docs/RELEASE_PROCESS.md).
 
+## Release evidence and environment safety
+**Synthetic-only staging:** `ENVIRONMENT=staging` is intended for a restricted, authenticated demonstration using fictional traffic and a managed PostgreSQL database. `ENVIRONMENT=production` explicitly refuses the bundled synthetic model, even if credentials are configured. Do not use this model to block payments.
+
+Generate a machine-readable readiness report with `python scripts/release_readiness.py --output artifacts/reports/release_readiness.json`. CI verifies the report but does not certify the platform. See [release readiness and external requirements](docs/RELEASE_READINESS.md).
+
 ## Quickstart (Python 3.11 recommended, Node.js 20+)
 ```bash
 python -m venv .venv

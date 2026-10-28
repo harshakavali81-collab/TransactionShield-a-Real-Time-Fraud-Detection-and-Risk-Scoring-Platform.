@@ -19,3 +19,6 @@
 - Actual request-stream byte accounting (including absent Content-Length) in FastAPI. This is only one protective measure, not penetration testing.
 - GitHub Pages workflow for a public **offline fictional simulation**; whether a public URL exists depends on GitHub Pages settings and the deployment run.
 - Render Blueprint for optional protected API staging with provider-managed HTTPS ingress and DB, and generated server-side API key; **not provisioned until Render is connected by an authorized owner**.
+
+## Explicit synthetic model production gate (October 2026)
+The optional Render Blueprint is staging-only. `ENVIRONMENT=production` is rejected by configuration because the repository contains no independently validated banking model. See [release readiness](RELEASE_READINESS.md) and the JSON evidence report.

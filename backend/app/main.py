@@ -24,7 +24,7 @@ logger = logging.getLogger("transactionshield")
 async def lifespan(app):
     validate_configuration()
     # Development convenience only. Production uses Alembic via the container startup command.
-    if ENVIRONMENT != "production":
+    if ENVIRONMENT in {"development", "test"}:
         init_db()
     yield
 
@@ -32,8 +32,8 @@ async def lifespan(app):
 app = FastAPI(
     title="TransactionShield API", version="1.1.0",
     description="Synthetic educational demonstration; not approved for financial decisions",
-    lifespan=lifespan, docs_url=None if ENVIRONMENT == "production" else "/docs",
-    redoc_url=None if ENVIRONMENT == "production" else "/redoc",
+    lifespan=lifespan, docs_url=None if ENVIRONMENT in {"staging", "production"} else "/docs",
+    redoc_url=None if ENVIRONMENT in {"staging", "production"} else "/redoc",
 )
 app.add_middleware(
     CORSMiddleware, allow_origins=CORS_ORIGINS, allow_credentials=False,

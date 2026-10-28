@@ -18,6 +18,13 @@ jobs:
         run: ruff check ml backend tests scripts streaming migrations --select E9,F63,F7,F82
       - name: Verify committed model and metrics checksum
         run: python scripts/verify_model_artifact.py
+      - name: Emit honest synthetic-only release evidence
+        run: python scripts/release_readiness.py --output artifacts/reports/release_readiness.json
+      - name: Upload release evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: synthetic-only-release-evidence
+          path: artifacts/reports/release_readiness.json
       - name: Unit and API tests
         env:
           DATABASE_URL: 'sqlite:///:memory:'

@@ -27,14 +27,26 @@ def validate_configuration():
     """Refuse to serve unprotected public deployments by accident."""
     if not 0 <= DEMO_RATE_LIMIT <= 10000:
         raise RuntimeError("DEMO_RATE_LIMIT must be 0..10000 requests per minute")
-    if ENVIRONMENT not in {"development", "test", "production"}:
-        raise RuntimeError("ENVIRONMENT must be development, test, or production")
-    if ENVIRONMENT == "production":
+    if ENVIRONMENT not in {"development", "test", "staging", "production"}:
+        raise RuntimeError("ENVIRONMENT must be development, test, staging, or production")
+    if not 1024 <= MAX_REQUEST_BYTES <= 1048576:
+        raise RuntimeError("MAX_REQUEST_BYTES must be between 1024 and 1048576")
+    if ENVIRONMENT in {"staging", "production"}:
         if len(API_KEY) < 32:
-            raise RuntimeError("Production requires a random API_KEY of at least 32 characters")
+            raise RuntimeError("Staging/production requires a random API_KEY of at least 32 characters")
         if any(v == "*" or v.startswith("http://") for v in CORS_ORIGINS):
-            raise RuntimeError("Production requires explicit HTTPS CORS origins")
+            raise RuntimeError("Staging/production requires explicit HTTPS CORS origins")
         if DATABASE_URL.startswith("sqlite:"):
-            raise RuntimeError("Production requires a managed PostgreSQL database")
+            raise RuntimeError("Staging/production requires a managed PostgreSQL database")
         if not MODEL_PATH.exists():
             raise RuntimeError("Trained model unavailable")
+        if not METRICS_PATH.is_file():
+            raise RuntimeError("Staging/production requires model evaluation metadata")
+        if DEMO_RATE_LIMIT <= 0:
+            raise RuntimeError("Staging/production requires an enabled per-instance demo rate limit")
+    if ENVIRONMENT == "production":
+        # This repository ships only a synthetic, unapproved demonstration model.
+        raise RuntimeError(
+            "Synthetic demonstration model is prohibited in production; "
+            "use protected staging for fictional traffic only"
+        )

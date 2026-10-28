@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "scope": "repository-contained evidence only; synthetic portfolio demonstration",
+  "status": "demo_artifacts_verified",
+  "model_purpose": "synthetic demonstration model; not approved for financial decisions",
+  "synthetic_holdout": {
+    "test_rows": 800,
+    "test_positive_labels": 21,
+    "test_prevalence": 0.02625,
+    "pr_auc": 0.0319484481658177,
+    "recall": 0.14285714285714285,
+    "precision": 0.02459016393442623,
+    "model_eligible_for_banking": false
+  },
+  "evidence_gates": {
+    "demo_model_artifact_integrity": true,
+    "labeled_real_world_holdout_independently_validated": false,
+    "authorized_live_bank_feed_verified": false,
+    "public_protected_backend_deployed_and_verified": false,
+    "identity_and_tenant_authorization_verified": false,
+    "independent_security_assessment_completed": false,
+    "financial_decision_use_authorized": false
+  },
+  "production_release_approved": false,
+  "external_validation_is_required": true,
+  "artifact_error_type": null,
+  "note": "CI success verifies software checks, not actual fraud effectiveness or production certification."
+}
