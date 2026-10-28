@@ -68,7 +68,7 @@ See [release process](docs/RELEASE_PROCESS.md).
 ## Release evidence and environment safety
 **Synthetic-only staging:** `ENVIRONMENT=staging` is intended for a restricted, authenticated demonstration using fictional traffic and a managed PostgreSQL database. `ENVIRONMENT=production` explicitly refuses the bundled synthetic model, even if credentials are configured. Do not use this model to block payments.
 
-Generate a machine-readable readiness report with `python scripts/release_readiness.py --output artifacts/reports/release_readiness.json`. CI verifies the report but does not certify the platform. See [release readiness and external requirements](docs/RELEASE_READINESS.md).
+Generate a truthful, machine-readable readiness report with `python scripts/release_readiness.py --output artifacts/reports/release_readiness.json`. CI verifies the report but does not certify the platform. See [release readiness and external requirements](docs/RELEASE_READINESS.md).
 
 ## Quickstart (Python 3.11 recommended, Node.js 20+)
 ```bash
@@ -153,3 +153,6 @@ The React **What-if lab** and `POST /simulate/what-if` compare two fully synthet
 ![Illustrative synthetic review-cost sensitivity](artifacts/reports/review_cost_sensitivity.svg)
 
 See [Demo walkthrough](docs/PORTFOLIO_DEMO.md) and [Decision-analysis explanation](docs/DECISION_ANALYSIS.md).
+
+## New: real PostgreSQL integration in CI (synthetic data only)
+The automated pipeline now provisions ephemeral PostgreSQL 16, runs Alembic migrations and a protected API integration smoke test, and builds both Docker images. A green CI run verifies those **software paths only**; it does not validate bank transaction feeds, public cloud hosting or financial-use approval. [Details](docs/POSTGRESQL_INTEGRATION.md).

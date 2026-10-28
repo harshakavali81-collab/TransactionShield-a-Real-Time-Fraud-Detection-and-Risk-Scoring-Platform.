@@ -21,9 +21,11 @@ TransactionShield/
 │       ├── end_to_end_smoke.json
 │       ├── model_comparison.png
 │       ├── precision_recall.png
+│       ├── release_readiness.json
 │       ├── review_cost_sensitivity.svg
 │       ├── rolling_backtest.json
 │       ├── rolling_backtest.png
+│       ├── rolling_backtest.svg
 │       ├── shap_summary.png
 │       └── synthetic_amounts.png
 ├── backend
@@ -36,6 +38,7 @@ TransactionShield/
 │   │   │   │   ├── health.py
 │   │   │   │   ├── monitoring.py
 │   │   │   │   ├── predict.py
+│   │   │   │   ├── simulate.py
 │   │   │   │   └── transactions.py
 │   │   │   └── __init__.py
 │   │   ├── core
@@ -68,6 +71,8 @@ TransactionShield/
 │   │   ├── test_predict.py
 │   │   ├── test_rate_limit.py
 │   │   ├── test_security.py
+│   │   ├── test_simulate.py
+│   │   ├── test_staging_safety.py
 │   │   └── test_transactions.py
 │   ├── __init__.py
 │   └── Dockerfile
@@ -81,7 +86,8 @@ TransactionShield/
 │   └── README.md
 ├── deploy
 │   ├── production.env.example
-│   └── render.yaml
+│   ├── render.yaml
+│   └── staging.env.example
 ├── docs
 │   ├── screenshots
 │   │   ├── .gitkeep
@@ -107,13 +113,16 @@ TransactionShield/
 │   ├── MODEL_INTEGRITY.md
 │   ├── OPERATIONS.md
 │   ├── PORTFOLIO_DEMO.md
+│   ├── POSTGRESQL_INTEGRATION.md
 │   ├── PRODUCTION_GAP_ANALYSIS.md
 │   ├── PROJECT_TREE.md
 │   ├── PROJECT_WORKFLOW.md
 │   ├── PUBLIC_DEMO.md
 │   ├── RELEASE_PROCESS.md
+│   ├── RELEASE_READINESS.md
 │   ├── RESULTS.md
 │   ├── ROLLING_VALIDATION.md
+│   ├── SCENARIO_COMPARISON.md
 │   ├── SECURITY.md
 │   ├── TEST_PLAN.md
 │   └── VISUAL_GALLERY.md
@@ -135,6 +144,7 @@ TransactionShield/
 │   │   │   ├── ModelPerformance.jsx
 │   │   │   ├── Monitoring.jsx
 │   │   │   ├── Predict.jsx
+│   │   │   ├── ScenarioComparison.jsx
 │   │   │   └── Transactions.jsx
 │   │   ├── styles
 │   │   │   └── global.css
@@ -194,9 +204,11 @@ TransactionShield/
 │   ├── generate_demo.py
 │   ├── generate_project_tree.py
 │   ├── purge_demo_data.py
+│   ├── release_readiness.py
 │   ├── rolling_backtest.py
 │   ├── simulate_stream.py
 │   ├── smoke_e2e.py
+│   ├── smoke_postgres.py
 │   ├── upgrade_legacy_database.py
 │   ├── validate_partner_feed.py
 │   └── verify_model_artifact.py
@@ -216,7 +228,9 @@ TransactionShield/
 │   ├── test_model_integrity.py
 │   ├── test_partner_and_holdout.py
 │   ├── test_pipeline_integration.py
+│   ├── test_postgres_smoke_guards.py
 │   ├── test_preprocessing.py
+│   ├── test_release_readiness.py
 │   ├── test_rolling_validation.py
 │   ├── test_streaming.py
 │   └── test_training.py
@@ -234,10 +248,3 @@ TransactionShield/
 ```
 
 The ML pipeline is under `ml/`, the protected API is under `backend/`, the React interface is under `frontend/`, and independent checks, architecture diagrams, deployment instructions, and reproducible synthetic evaluation evidence are under `tests/`, `docs/`, `.github/`, and `artifacts/`.
-
-### Additional scenario comparison feature
-
-- `backend/app/api/routes/simulate.py` — stateless synthetic what-if scoring endpoint.
-- `backend/tests/test_simulate.py` — validation and no-persistence API tests.
-- `frontend/src/pages/ScenarioComparison.jsx` — React what-if lab, including offline simulation.
-- `docs/SCENARIO_COMPARISON.md` — API contract, example, and limitations.

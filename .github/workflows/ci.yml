@@ -59,7 +59,7 @@ jobs:
           python scripts/verify_model_artifact.py
           python scripts/create_report.py
           python scripts/decision_costs.py
-      - name: Reproduce rolling-origin synthetic diagnostics
+      - name: Repeat synthetic rolling-origin baseline evaluation
         run: python scripts/rolling_backtest.py
       - name: Upload synthetic charts
         uses: actions/upload-artifact@v4
@@ -80,10 +80,58 @@ jobs:
           node-version: 20
       - run: npm install --no-audit --no-fund
       - run: npm run build
+  postgres-integration:
+    name: PostgreSQL 16 integration (fictional transactions)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: shield
+          POSTGRES_PASSWORD: shield_ci_password
+          POSTGRES_DB: transactionshield_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U shield -d transactionshield_ci"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 12
+    env:
+      DATABASE_URL: postgresql+psycopg://shield:shield_ci_password@localhost:5432/transactionshield_ci
+      ENVIRONMENT: test
+      API_KEY: ci-only-synthetic-PostgreSQL-key
+      DEMO_RATE_LIMIT: '0'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install backend and test dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Migrate fresh isolated PostgreSQL database
+        run: alembic upgrade head
+      - name: Run authenticated PostgreSQL API smoke and rollback checks
+        run: python scripts/smoke_postgres.py --report artifacts/reports/postgres_ci_smoke.json
+      - name: Upload PostgreSQL synthetic integration evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: synthetic-postgres-integration
+          path: artifacts/reports/postgres_ci_smoke.json
+  docker-build:
+    name: Build backend and frontend Docker images
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build FastAPI model-serving image
+        run: docker build --file backend/Dockerfile --tag transactionshield-backend:ci .
+      - name: Build React/Nginx image
+        run: docker build --file frontend/Dockerfile --tag transactionshield-frontend:ci frontend/
   source-bundle:
     name: Archive tested source
     if: github.event_name == 'push'
-    needs: [python, frontend]
+    needs: [python, frontend, postgres-integration, docker-build]
     runs-on: ubuntu-latest
     permissions:
       contents: read
