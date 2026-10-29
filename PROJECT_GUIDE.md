@@ -1,0 +1,160 @@
+> Historical detailed project guide. The root README and repository inventory describe currently available files; older release notes may refer to external bundles or earlier versions.
+
+![Branded TransactionShield project banner](docs/visuals/hero-banner.svg)
+
+# 🛡️ TransactionShield — Real-Time Fraud Detection & Risk Scoring Platform
+
+> **Portfolio/demo application** · Machine learning + FastAPI + React + SQLAlchemy/PostgreSQL + Docker + optional MLflow and SHAP. **Data, predictions, and evaluation are synthetic. This is not a production fraud detector.**
+
+## Visual tour
+
+> **Synthetic-only demonstration.** The dashboard graphic is a concept, not a capture of a live deployment. All plotted metrics come from the recorded synthetic experiment.
+
+![Illustrative TransactionShield dashboard](docs/visuals/dashboard-concept.svg)
+
+| Architecture | Model comparison (validation PR-AUC) |
+| :---: | :---: |
+| ![Architecture pipeline](docs/visuals/system-architecture.svg) | ![Validation performance comparison](docs/visuals/model-benchmark.svg) |
+
+| Measured held-out metrics | Release readiness |
+| :---: | :---: |
+| ![Test confusion matrix](docs/visuals/evaluation-summary.svg) | ![External production requirements](docs/visuals/readiness-roadmap.svg) |
+
+[View the complete visual gallery](docs/VISUAL_GALLERY.md) · [Original detailed architecture](docs/screenshots/transactionshield-architecture.png)
+
+
+## What it does
+TransactionShield scores synthetic credit card, wallet, transfer, and e-commerce transaction attributes. A fitted classifier estimates a fraud score; configurable rule-based review hints complement (but do **not** explain) the model. The REST API persists scored transactions and a responsive React dashboard visualizes review flags, history, risk distribution, and measured synthetic test metrics. The dashboard refreshes every 30 seconds; this is polling rather than a stream processor.
+
+### Features
+- Deterministic synthetic transaction generation and validation, without real financial data.
+- Leakage-safe scikit-learn preprocessing; **chronological** train/validation/test evaluation.
+- Logistic Regression, Random Forest and optional XGBoost/LightGBM comparison by **validation PR-AUC**.
+- Independent validation F2 threshold selection; held-out precision, recall, F1, PR-AUC, ROC-AUC, Brier score and confusion matrix.
+- Five-fold expanding-window diagnostic with a fixed logistic baseline, per-fold validation thresholds and chart (all fictional data).
+- Optional tree SHAP summary function and MLflow tracking. UI review hints are separate explicit rules.
+- FastAPI: `/predict`, `/history`, `/transactions/{id}`, `/statistics`, `/analytics`, `/metrics`, `/health`, and `/docs`.
+- Pydantic constraints, duplicate transaction ID protection, SQLite development fallback, PostgreSQL Docker service.
+- Optional bounded per-peer demonstration rate limiting (`DEMO_RATE_LIMIT`, HTTP 429 with `Retry-After`); **not** a production gateway.
+- React / Recharts: Overview, Scoring, Transactions with CSV export, Analytics, Model Performance.
+- Tests, architecture docs, workflows, reproducible charts, Docker Compose, local simulator.
+- Ephemeral authenticated end-to-end API smoke check with 14 cross-component assertions and zero persisted customer or test data.
+- Guarded SQLite-only synthetic backup demonstration with dry-run, schema checks, no overwrite, and verified snapshot counts.
+- Alembic migration, readiness checks, request-security guardrails, drift monitoring API and React monitoring tab.
+- Optional Kafka-compatible synthetic producer/consumer with at-least-once offset commits.
+- Clear demo-review feedback provenance and operational deployment/security runbooks.
+
+## Verified model artifacts and repeatable Docker builds
+
+- The committed synthetic model and metrics have a SHA-256 manifest (`artifacts/models/model_manifest.json`) checked before predictions and in `/ready`.
+- Docker **does not retrain at build time**. Explicit training updates the model, metrics, and manifest together. The API fails closed with HTTP 503 for corrupt model output.
+- Run `python scripts/verify_model_artifact.py` to check consistency. SHA-256 is **not** a digital signature, a guarantee against malicious pickle contents, or evidence of real fraud-detection performance.
+- [Model integrity and release guide](docs/MODEL_INTEGRITY.md)
+
+## Fictional data retention and evaluation integrity
+
+- The `/metrics` endpoint verifies the model/metrics SHA-256 manifest before returning recorded synthetic results; corrupted or missing files yield HTTP 503 instead of unverified statistics.
+- The CLI `python scripts/purge_demo_data.py --days 30` previews fictional scoring records older than 30 days, while `--apply --confirm-synthetic-only` is required for bounded, transactional removal together with matching demo feedback; it refuses production configuration.
+- No real banking records, payment identifiers, customer details, or actual data-retention certification are included. See [synthetic data retention](docs/DEMO_DATA_RETENTION.md).
+
+## Demo API request limits
+
+For local testing, set `DEMO_RATE_LIMIT=60` to allow bursts of up to 60 requests per minute per transport peer per application process. The in-memory token bucket refills gradually and returns HTTP 429 with `Retry-After` when exhausted; the default `0` disables it. Liveness/readiness and CORS preflight are not charged. This limiter cannot coordinate across workers and must **not** replace a production reverse-proxy/WAF/distributed quota system. See [security boundaries](docs/SECURITY.md).
+
+## Download the tested project source
+
+On every `main` push, GitHub Actions packages an **exact snapshot of the tested source commit** into a ZIP and uploads a SHA-256 checksum, but only if both the Python and React jobs pass.
+Open the [CI build history](https://github.com/harshakavali81-collab/TransactionShield-a-Real-Time-Fraud-Detection-and-Risk-Scoring-Platform./actions/workflows/ci.yml), select a successful run, and download its `TransactionShield-source-...` artifact under **Artifacts**. Retention is 30 days. This is a source bundle—not a verified production deployment.
+See [release process](docs/RELEASE_PROCESS.md).
+
+## Release evidence and environment safety
+**Synthetic-only staging:** `ENVIRONMENT=staging` is intended for a restricted, authenticated demonstration using fictional traffic and a managed PostgreSQL database. `ENVIRONMENT=production` explicitly refuses the bundled synthetic model, even if credentials are configured. Do not use this model to block payments.
+
+Generate a truthful, machine-readable readiness report with `python scripts/release_readiness.py --output artifacts/reports/release_readiness.json`. CI verifies the report but does not certify the platform. See [release readiness and external requirements](docs/RELEASE_READINESS.md).
+
+## Quickstart (Python 3.11 recommended, Node.js 20+)
+```bash
+python -m venv .venv
+# Windows: .venv\Scripts\activate
+# Linux/macOS: source .venv/bin/activate
+pip install -r requirements-dev.txt
+python scripts/generate_demo.py
+python -m ml.training.train
+python scripts/verify_model_artifact.py
+python scripts/create_report.py
+pytest -q
+uvicorn backend.app.main:app --reload
+```
+Open a second terminal:
+```bash
+cd frontend
+npm install
+npm run dev
+```
+React: http://localhost:5173 · API documentation: http://localhost:8000/docs
+
+Or run `docker compose up --build -d` after training for PostgreSQL + React/Nginx + API (UI: http://localhost:3000). Optional MLflow tracking via `docker compose --profile tracking up -d mlflow` and `MLFLOW_TRACKING_URI=http://localhost:5000 python -m ml.training.train --tracking`.
+
+## Example transaction
+```json
+{"amount":1500,"hour":2,"account_age_days":10,"velocity_24h":11,"prior_chargebacks":1,"ip_risk_score":0.85,"is_international":1,"is_new_device":1,"merchant_category":"gaming","transaction_type":"card"}
+```
+POST to `/predict` and inspect `fraud_probability`, `risk_score` (0–100), `risk_level`, `is_flagged` and `reasons`. The probability is *not guaranteed calibrated*; the decision threshold is tuned on validation samples; risk category bands are demonstration policy thresholds.
+
+## Data safety and provenance
+**NO customer data or credit card numbers** included. `data/raw/synthetic_transactions.csv` is generated locally and ignored by Git. Never present results as actual bank or card-network model performance. Deploy only after a thorough security, legal, calibration, human-review, fairness and ground-truth evaluation program.
+
+## What-if scenario lab (new)
+
+The React **What-if lab** and `POST /simulate/what-if` compare two fully synthetic transactions without writing either to the database. The feature changes and score differences demonstrate model sensitivity, **not causal effects** or actual fraud prevention. The offline GitHub Pages version uses distinct fictional browser rules rather than the trained model. See [Scenario comparison guide](docs/SCENARIO_COMPARISON.md).
+
+## Documentation & bookmarks
+- [Visual gallery](docs/VISUAL_GALLERY.md)
+- [System architecture](docs/ARCHITECTURE.md)
+- [Stateless synthetic what-if comparison](docs/SCENARIO_COMPARISON.md)
+- [Repository tree](docs/PROJECT_TREE.md)
+- [Measured synthetic results & graphs](docs/RESULTS.md)
+- [Rolling-origin model evaluation report & graph](docs/ROLLING_VALIDATION.md)
+- [Development workflow](docs/PROJECT_WORKFLOW.md)
+- [API endpoints](docs/API_REFERENCE.md)
+- [Model card, limitations & dataset provenance](docs/MODEL_CARD.md)
+- [Deployment instructions](docs/DEPLOYMENT.md)
+- [Test plan](docs/TEST_PLAN.md)
+- [End-to-end API verification and reproducible report](docs/END_TO_END_VERIFICATION.md)
+- [Local fictional SQLite backup and recovery drill](docs/DEMO_BACKUP_RECOVERY.md)
+- [Security policy & threat model](docs/SECURITY.md)
+- [Safe cleanup for synthetic demo records](docs/DEMO_DATA_RETENTION.md)
+- [Operational runbook and optional Kafka](docs/OPERATIONS.md)
+- [Production readiness gaps](docs/PRODUCTION_GAP_ANALYSIS.md)
+- [Authorized, PII-minimized feed validation](docs/INTEGRATION_CONTRACT.md)
+- [Frozen-model independent holdout evaluator](docs/INDEPENDENT_VALIDATION.md)
+- [Public offline preview on GitHub Pages](docs/PUBLIC_DEMO.md)
+- [Protected cloud staging Blueprint](docs/CLOUD_STAGING.md)
+- [Dataset documentation](data/README.md)
+- [Model comparison chart](artifacts/reports/model_comparison.png) · [Precision-recall chart](artifacts/reports/precision_recall.png) · [Confusion matrix](artifacts/reports/confusion_matrix.png) · [SHAP illustration](artifacts/reports/shap_summary.png)
+- [GitHub Actions](.github/workflows/ci.yml)
+- [FastAPI documentation](http://localhost:8000/docs) (after starting local backend)
+- [MLflow documentation](https://mlflow.org/docs/latest/index.html)
+- [SHAP documentation](https://shap.readthedocs.io/)
+
+## Interview-ready explanation
+"I created an end-to-end fraud risk scoring demo that generates synthetic transactions, evaluates multiple classifiers under a chronological split, tunes a threshold independently from test data, and serves predictions over FastAPI. I built a React dashboard, stored predictions in SQL, included optional SHAP/MLflow experiments and automated tests. I emphasize precision-recall tradeoffs and avoid treating synthetic validation as proof of production fraud performance."
+
+## Project roadmap
+- **Implemented:** Synthetic data, ML model comparisons, risk scoring, SQL persistence, REST API, responsive React dashboard, CI, Docker, documentation.
+- **Implemented expansion:** Initial Alembic schema, health/readiness, synthetic drift monitoring and bounded review feedback, security defaults, monitoring UI, optional Kafka-compatible demo integration.
+- **Implemented evaluation/deployment expansion:** strict authorized CSV contract, frozen-model external holdout report with bootstrap intervals, streaming request-byte ceiling, offline static React preview, Pages publishing workflow, and optional Render API+PostgreSQL staging blueprint. These require real owner configuration to publish/run.
+- **Production blockers:** Consented labeled data and validation, calibration, tenant-aware identity, encryption and gateway policies, real backup/restore, hosted cloud infrastructure, managed event ingestion, independent audits, monitoring alerts and operational approvals. These cannot be claimed complete.
+
+## Latest portfolio enhancements — batch scoring and decision analysis
+
+- `POST /predict/batch` securely validates and atomically persists **1–25** synthetic transactions; duplicate inputs, scoring errors and invalid payloads never produce partial DB writes. See [API guide](docs/API_REFERENCE.md).
+- Run `python scripts/decision_costs.py` to generate [review-cost sensitivity chart](artifacts/reports/review_cost_sensitivity.svg) from the **recorded synthetic test confusion matrix**. It illustrates hypothetical review costs while keeping the threshold fixed. These are **not estimated fraud losses** or a trained cost model.
+- `pytest -q` and GitHub CI cover batch persistence, duplicate protection, failure rollback, data constraints and scenario math.
+
+![Illustrative synthetic review-cost sensitivity](artifacts/reports/review_cost_sensitivity.svg)
+
+See [Demo walkthrough](docs/PORTFOLIO_DEMO.md) and [Decision-analysis explanation](docs/DECISION_ANALYSIS.md).
+
+## New: real PostgreSQL integration in CI (synthetic data only)
+The automated pipeline now provisions ephemeral PostgreSQL 16, runs Alembic migrations and a protected API integration smoke test, and builds both Docker images. A green CI run verifies those **software paths only**; it does not validate bank transaction feeds, public cloud hosting or financial-use approval. [Details](docs/POSTGRESQL_INTEGRATION.md).

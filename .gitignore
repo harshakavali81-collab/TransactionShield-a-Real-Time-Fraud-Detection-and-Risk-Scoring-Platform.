@@ -20,3 +20,17 @@ data/processed/*.csv
 artifacts/reports/external_validation*.json
 data/authorized/
 *.secrets.json
+
+# Local credentials and development caches
+.env
+.env.*
+!.env.example
+!.env.*.example
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+node_modules/
+.DS_Store
+Thumbs.db
